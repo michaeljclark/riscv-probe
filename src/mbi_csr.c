@@ -4,6 +4,10 @@ static int all_csr_enums[] = {
 	mbi_csr_fflags,
 	mbi_csr_frm,
 	mbi_csr_fcsr,
+	mbi_csr_mcycle,
+	mbi_csr_minstret,
+	mbi_csr_mcycleh,
+	mbi_csr_minstreth,
 	mbi_csr_cycle,
 	mbi_csr_time,
 	mbi_csr_instret,
@@ -46,6 +50,10 @@ static const char* all_csr_names[] = {
 	"fflags",
 	"frm",
 	"fcsr",
+	"mcycle",
+	"minstret",
+	"mcycleh",
+	"minstreth",
 	"cycle",
 	"time",
 	"instret",
@@ -99,6 +107,10 @@ long mbi_read_csr_enum(int csrenum)
 		case mbi_csr_fflags:     result = mbi_read_csr(0x001); break;
 		case mbi_csr_frm:        result = mbi_read_csr(0x002); break;
 		case mbi_csr_fcsr:       result = mbi_read_csr(0x003); break;
+		case mbi_csr_mcycle:     result = mbi_read_csr(0xB00); break;
+		case mbi_csr_minstret:   result = mbi_read_csr(0xB02); break;
+		case mbi_csr_mcycleh:    result = mbi_read_csr(0xB80); break;
+		case mbi_csr_minstreth:  result = mbi_read_csr(0xB82); break;
 		case mbi_csr_cycle:      result = mbi_read_csr(0xC00); break;
 		case mbi_csr_time:       result = mbi_read_csr(0xC01); break;
 		case mbi_csr_instret:    result = mbi_read_csr(0xC02); break;
@@ -144,6 +156,10 @@ void mbi_write_csr_enum(int csrenum, long value)
 		case mbi_csr_fflags:     mbi_write_csr(0x001, value); break;
 		case mbi_csr_frm:        mbi_write_csr(0x002, value); break;
 		case mbi_csr_fcsr:       mbi_write_csr(0x003, value); break;
+		case mbi_csr_mcycle:     mbi_write_csr(0xB00, value); break;
+		case mbi_csr_minstret:   mbi_write_csr(0xB02, value); break;
+		case mbi_csr_mcycleh:    mbi_write_csr(0xB80, value); break;
+		case mbi_csr_minstreth:  mbi_write_csr(0xB82, value); break;
 		case mbi_csr_cycle:      mbi_write_csr(0xC00, value); break;
 		case mbi_csr_time:       mbi_write_csr(0xC01, value); break;
 		case mbi_csr_instret:    mbi_write_csr(0xC02, value); break;
