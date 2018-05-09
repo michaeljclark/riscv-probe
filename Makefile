@@ -19,9 +19,14 @@ MBI_HTIF_LIB = libmbi_htif.a
 MBI_HTIF_RV32_OBJ = $(addprefix obj/riscv32/,$(MBI_HTIF_OBJS))
 MBI_HTIF_RV64_OBJ = $(addprefix obj/riscv64/,$(MBI_HTIF_OBJS))
 
+MBI_UART_OBJS = mbi_uart.o
+MBI_UART_LIB = libmbi_uart.a
+MBI_UART_RV32_OBJ = $(addprefix obj/riscv32/,$(MBI_UART_OBJS))
+MBI_UART_RV64_OBJ = $(addprefix obj/riscv64/,$(MBI_UART_OBJS))
+
 all: programs
 
-programs: bin/riscv32/probe-htif bin/riscv64/probe-htif
+programs: bin/riscv32/probe-htif bin/riscv64/probe-htif bin/riscv32/probe-uart bin/riscv64/probe-uart
 
 clean:
 	rm -fr bin lib obj
@@ -53,8 +58,20 @@ lib/riscv32/$(MBI_HTIF_LIB): $(MBI_HTIF_RV32_OBJ)
 lib/riscv64/$(MBI_HTIF_LIB): $(MBI_HTIF_RV64_OBJ)
 	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
 
+lib/riscv32/$(MBI_UART_LIB): $(MBI_UART_RV32_OBJ)
+	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+
+lib/riscv64/$(MBI_UART_LIB): $(MBI_UART_RV64_OBJ)
+	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+
 bin/riscv32/probe-htif: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_HTIF_LIB)
 	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
 
 bin/riscv64/probe-htif: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_HTIF_LIB)
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+
+bin/riscv32/probe-uart: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+
+bin/riscv64/probe-uart: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_LIB)
 	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
