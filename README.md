@@ -7,6 +7,21 @@ and [QEMU](https://github.com/riscv/riscv-qemu) and can be used to compare
 control and status registers. It can also be used as a starting point for
 bare metal RISC-V programs using the (MBI) machine binary interface.
 
+## Invocation
+
+Example invocations:
+
+- `$ spike --isa=RV32IMAFDC bin/riscv32/probe-htif`
+- `$ spike --isa=RV64IMAFDC bin/riscv64/probe-htif`
+- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-htif`
+- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-htif`
+- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel bin/riscv32/probe-uart`
+- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel bin/riscv64/probe-uart`
+
+_**Note**: default linker script `conf/htif_0x80000000.lds` is suitable for use
+for creating bare metal binaries that run in the QEMU `spike_v1.9.1`, `spike_v1.10`
+and `sifive_u` machines because the default link address is `0x80000000`)_.
+
 ### riscv-probe in qemu-system-riscv32
 
 ```

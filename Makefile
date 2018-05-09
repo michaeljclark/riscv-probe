@@ -24,6 +24,9 @@ MBI_UART_LIB = libmbi_uart.a
 MBI_UART_RV32_OBJ = $(addprefix obj/riscv32/,$(MBI_UART_OBJS))
 MBI_UART_RV64_OBJ = $(addprefix obj/riscv64/,$(MBI_UART_OBJS))
 
+LINKER_SCRIPT=conf/htif_0x80000000.lds
+#LINKER_SCRIPT=conf/nvram_0x20400000.lds
+
 all: programs
 
 programs: bin/riscv32/probe-htif bin/riscv64/probe-htif bin/riscv32/probe-uart bin/riscv64/probe-uart
@@ -65,13 +68,13 @@ lib/riscv64/$(MBI_UART_LIB): $(MBI_UART_RV64_OBJ)
 	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
 
 bin/riscv32/probe-htif: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_HTIF_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
 
 bin/riscv64/probe-htif: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_HTIF_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
 
 bin/riscv32/probe-uart: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
 
 bin/riscv64/probe-uart: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T src/mbi_htif.lds $^ -o $@
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
