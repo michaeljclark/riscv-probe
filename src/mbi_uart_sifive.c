@@ -10,7 +10,8 @@ enum {
     UART_REG_DIV = 4
 };
 
-int *uart = (int *)0x10013000;
+/* UART0 address on riscv-qemu 'sifive_e' and 'sifive_u' machines */
+volatile int *uart = (int *)0x10013000;
 
 int mbi_console_getchar()
 {
@@ -21,9 +22,8 @@ int mbi_console_getchar()
 
 void mbi_console_putchar(uint8_t ch)
 {
-    volatile int *tx = &uart[UART_REG_TXFIFO];
-    while (*tx < 0);
-    *tx = ch;
+    while (uart[UART_REG_TXFIFO] < 0);
+    uart[UART_REG_TXFIFO] = ch;
 }
 
 void mbi_poweroff()

@@ -9,6 +9,7 @@ enum {
     UART_REG_STATUS_TX = 0x20
 };
 
+/* UART0 address on riscv-qemu 'virt' machine */
 volatile uint8_t *uart16550 = (uint8_t *)0x10000000;
 
 int mbi_console_getchar()
