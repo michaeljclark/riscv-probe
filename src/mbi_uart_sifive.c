@@ -10,25 +10,25 @@ enum {
     UART_REG_DIV = 4
 };
 
-uint32_t *uart = (uint32_t *)0x10013000;
+int *uart = (int *)0x10013000;
 
 int mbi_console_getchar()
 {
-  int32_t ch = uart[UART_REG_RXFIFO];
-  if (ch < 0) return -1;
-  return ch;
+    int ch = uart[UART_REG_RXFIFO];
+    if (ch < 0) return -1;
+    return ch;
 }
 
 void mbi_console_putchar(uint8_t ch)
 {
-    volatile uint32_t *tx = &uart[UART_REG_TXFIFO];
-    while ((int32_t)(*tx) < 0);
+    volatile int *tx = &uart[UART_REG_TXFIFO];
+    while (*tx < 0);
     *tx = ch;
 }
 
 void mbi_poweroff()
 {
-  while (1) {
-    asm volatile("");
-  }
+    while (1) {
+        asm volatile("");
+    }
 }
