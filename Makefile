@@ -29,7 +29,7 @@ MBI_UART_16550_LIB = libmbi_uart_16550.a
 MBI_UART_16550_RV32_OBJ = $(addprefix obj/riscv32/,$(MBI_UART_16550_OBJS))
 MBI_UART_16550_RV64_OBJ = $(addprefix obj/riscv64/,$(MBI_UART_16550_OBJS))
 
-LINKER_SCRIPT=conf/htif_0x80000000.lds
+LINKER_SCRIPT=conf/dram_0x80000000.lds
 #LINKER_SCRIPT=conf/nvram_0x20400000.lds
 
 ALL_PROGRAMS =	bin/riscv32/probe-htif \
