@@ -15,12 +15,14 @@ Example invocations:
 - `$ spike --isa=RV64IMAFDC bin/riscv64/probe-htif`
 - `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-htif`
 - `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-htif`
-- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel bin/riscv32/probe-uart`
-- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel bin/riscv64/probe-uart`
+- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel bin/riscv32/probe-uart-sifive`
+- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel bin/riscv64/probe-uart-sifive`
+- `$ qemu-system-riscv32 -nographic -machine virt -kernel bin/riscv32/probe-uart-16550`
+- `$ qemu-system-riscv64 -nographic -machine virt -kernel bin/riscv64/probe-uart-16550`
 
-_**Note**: default linker script `conf/htif_0x80000000.lds` is suitable for use
-for creating bare metal binaries that run in the QEMU `spike_v1.9.1`, `spike_v1.10`
-and `sifive_u` machines because the default link address is `0x80000000`)_.
+_**Note**: default linker script `conf/dram_0x80000000.lds` is suitable for use
+for creating bare metal binaries that run in the QEMU `spike_v1.9.1`, `spike_v1.10`,
+`sifive_u` and `virt` machines because the default link address is `0x80000000`)_.
 
 ### riscv-probe in qemu-system-riscv32
 
