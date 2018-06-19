@@ -41,16 +41,6 @@ SECTIONS
   _etext = .;
 
   /*--------------------------------------------------------------------*/
-  /* HTIF, isolated onto separate page                                  */
-  /*--------------------------------------------------------------------*/
-  . = ALIGN(0x1000);
-  .htif :
-  {
-    *(.htif)
-  }
-  . = ALIGN(0x1000);
-
-  /*--------------------------------------------------------------------*/
   /* Initialized data segment                                           */
   /*--------------------------------------------------------------------*/
 
@@ -77,11 +67,6 @@ SECTIONS
   /* Uninitialized data segment                                         */
   /*--------------------------------------------------------------------*/
 
-  /* Start of uninitialized data segment */
-  . = .;
-  _fbss = .;
-
-  /* sbss: Uninitialized writeable small data section */
   . = .;
 
   /* bss: Uninitialized writeable data section */
@@ -94,16 +79,6 @@ SECTIONS
     *(.sbss*)
     *(.gnu.linkonce.b.*)
     *(COMMON)
-  }
-
-  .sbi :
-  {
-    *(.sbi)
-  }
-
-  .payload :
-  {
-    *(.payload)
   }
 
   _end = .;
