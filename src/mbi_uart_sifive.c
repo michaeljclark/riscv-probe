@@ -12,6 +12,7 @@ enum {
 
 /* UART0 address on riscv-qemu 'sifive_e' and 'sifive_u' machines */
 volatile int *uart = (int *)0x10013000;
+volatile uint32_t *testfinisher = (uint32_t *)0x100000;
 
 int mbi_console_getchar()
 {
@@ -28,6 +29,7 @@ void mbi_console_putchar(uint8_t ch)
 
 void mbi_poweroff()
 {
+    *testfinisher = 0x5555;
     while (1) {
         asm volatile("");
     }
