@@ -13,21 +13,19 @@ Example invocations:
 
 - `$ spike --isa=RV32IMAFDC bin/riscv32/probe-htif`
 - `$ spike --isa=RV64IMAFDC bin/riscv64/probe-htif`
-- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-htif`
-- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-htif`
-- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel bin/riscv32/probe-uart-sifive`
-- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel bin/riscv64/probe-uart-sifive`
-- `$ qemu-system-riscv32 -nographic -machine virt -kernel bin/riscv32/probe-uart-16550`
-- `$ qemu-system-riscv64 -nographic -machine virt -kernel bin/riscv64/probe-uart-16550`
-
-_**Note**: default linker script `conf/dram_0x80000000.lds` is suitable for use
-for creating bare metal binaries that run in the QEMU `spike_v1.9.1`, `spike_v1.10`,
-`sifive_u` and `virt` machines because the default link address is `0x80000000`)_.
+- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-spike`
+- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-spike`
+- `$ qemu-system-riscv32 -nographic -machine virt -kernel bin/riscv32/probe-virt`
+- `$ qemu-system-riscv64 -nographic -machine virt -kernel bin/riscv64/probe-virt`
+- `$ qemu-system-riscv32 -nographic -machine sifive_e -kernel bin/riscv32/probe-sifive_e`
+- `$ qemu-system-riscv64 -nographic -machine sifive_e -kernel bin/riscv64/probe-sifive_e`
+- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel bin/riscv32/probe-sifive_u`
+- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel bin/riscv64/probe-sifive_u`
 
 ### riscv-probe in qemu-system-riscv32
 
 ```
-$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-htif 
+$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel bin/riscv32/probe-spike 
 isa: rv32imafdcsu
 csr: fflags          (not supported) cause=2
 csr: frm             (not supported) cause=2
@@ -75,7 +73,7 @@ csr: satp            0x00000000
 ### riscv-probe in qemu-system-riscv64
 
 ```
-$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-htif 
+$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel bin/riscv64/probe-spike 
 isa: rv64imafdcsu
 csr: fflags          (not supported) cause=2
 csr: frm             (not supported) cause=2

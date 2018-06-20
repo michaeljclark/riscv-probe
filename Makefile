@@ -1,4 +1,4 @@
-CC_32=riscv32-unknown-elf-gcc
+CC_32=riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32
 CC_64=riscv64-unknown-elf-gcc
 AR=riscv64-unknown-elf-ar
 
@@ -29,16 +29,19 @@ MBI_UART_16550_LIB = libmbi_uart_16550.a
 MBI_UART_16550_RV32_OBJ = $(addprefix obj/riscv32/,$(MBI_UART_16550_OBJS))
 MBI_UART_16550_RV64_OBJ = $(addprefix obj/riscv64/,$(MBI_UART_16550_OBJS))
 
-LINKER_SCRIPT=conf/htif_0x80000000.lds
-#LINKER_SCRIPT=conf/dram_0x80000000.lds
-#LINKER_SCRIPT=conf/nvram_0x20400000.lds
+SPIKE_LD_SCRIPT=conf/htif_0x80000000.lds
+VIRT_LD_SCRIPT=conf/dram_0x80000000.lds
+SIFIVE_U_LD_SCRIPT=conf/dram_0x80000000.lds
+SIFIVE_E_LD_SCRIPT=conf/nvram_0x20400000.lds
 
-ALL_PROGRAMS =	bin/riscv32/probe-htif \
-				bin/riscv64/probe-htif \
-				bin/riscv32/probe-uart-sifive \
-				bin/riscv64/probe-uart-sifive \
-				bin/riscv32/probe-uart-16550 \
-				bin/riscv64/probe-uart-16550
+ALL_PROGRAMS =	bin/riscv32/probe-spike \
+				bin/riscv64/probe-spike \
+				bin/riscv32/probe-virt \
+				bin/riscv64/probe-virt \
+				bin/riscv32/probe-sifive_e \
+				bin/riscv64/probe-sifive_e \
+				bin/riscv32/probe-sifive_u \
+				bin/riscv64/probe-sifive_u
 
 all: programs
 
@@ -86,20 +89,26 @@ lib/riscv32/$(MBI_UART_16550_LIB): $(MBI_UART_16550_RV32_OBJ)
 lib/riscv64/$(MBI_UART_16550_LIB): $(MBI_UART_16550_RV64_OBJ)
 	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
 
-bin/riscv32/probe-htif: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_HTIF_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv32/probe-spike: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_HTIF_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${SPIKE_LD_SCRIPT} $^ -o $@
 
-bin/riscv64/probe-htif: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_HTIF_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv64/probe-spike: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_HTIF_LIB)
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${SPIKE_LD_SCRIPT} $^ -o $@
 
-bin/riscv32/probe-uart-sifive: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_SIFIVE_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv32/probe-virt: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_16550_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${VIRT_LD_SCRIPT} $^ -o $@
 
-bin/riscv64/probe-uart-sifive: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_SIFIVE_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv64/probe-virt: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_16550_LIB)
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${VIRT_LD_SCRIPT} $^ -o $@
 
-bin/riscv32/probe-uart-16550: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_16550_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv32/probe-sifive_e: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_SIFIVE_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${SIFIVE_E_LD_SCRIPT} $^ -o $@
 
-bin/riscv64/probe-uart-16550: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_16550_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${LINKER_SCRIPT} $^ -o $@
+bin/riscv64/probe-sifive_e: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_SIFIVE_LIB)
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${SIFIVE_E_LD_SCRIPT} $^ -o $@
+
+bin/riscv32/probe-sifive_u: $(PROBE_RV32_OBJ) lib/riscv32/$(MBI_CORE_LIB) lib/riscv32/$(MBI_UART_SIFIVE_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${SIFIVE_U_LD_SCRIPT} $^ -o $@
+
+bin/riscv64/probe-sifive_u: $(PROBE_RV64_OBJ) lib/riscv64/$(MBI_CORE_LIB) lib/riscv64/$(MBI_UART_SIFIVE_LIB)
+	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${SIFIVE_U_LD_SCRIPT} $^ -o $@
