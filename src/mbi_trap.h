@@ -2,7 +2,7 @@
 #define _RISCV_MTRAP_H
 
 #ifdef __riscv_atomic
-# define MAX_HARTS 8 // arbitrary
+# define MAX_HARTS 2 // arbitrary
 #else
 # define MAX_HARTS 1
 #endif
