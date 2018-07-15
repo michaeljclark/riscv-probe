@@ -2,7 +2,7 @@ CC_32=riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32
 CC_64=riscv64-unknown-elf-gcc -march=rv64imac -mabi=lp64
 AR=riscv64-unknown-elf-ar
 
-CFLAGS=-mcmodel=medany
+CFLAGS=-mcmodel=medany -Os
 LDFLAGS=-nostartfiles -nostdlib -static
 
 PROBE_OBJ = probe.o
