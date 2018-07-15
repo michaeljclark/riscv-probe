@@ -2,8 +2,8 @@
 
 #include "atomic.h"
 #include "encoding.h"
-#include "mbi_trap.h"
-#include "mbi.h"
+#include "trap.h"
+#include "common.h"
 
 # define TOHOST_CMD(dev, cmd, payload) \
   (((uint64_t)(dev) << 56) | ((uint64_t)(cmd) << 48) | (uint64_t)(payload))
@@ -63,7 +63,7 @@ static void do_tohost_fromhost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
   spinlock_unlock(&htif_lock);
 }
 
-int mbi_console_getchar()
+int getchar()
 {
   spinlock_lock(&htif_lock);
     __check_fromhost();
@@ -77,14 +77,15 @@ int mbi_console_getchar()
   return ch - 1;
 }
 
-void mbi_console_putchar(uint8_t ch)
+int putchar(int ch)
 {
   spinlock_lock(&htif_lock);
-    __set_tohost(1, 1, ch);
+    __set_tohost(1, 1, ch & 0xff);
   spinlock_unlock(&htif_lock);
+  return ch & 0xff;
 }
 
-void mbi_poweroff()
+void poweroff()
 {
   while (1) {
     fromhost = 0;

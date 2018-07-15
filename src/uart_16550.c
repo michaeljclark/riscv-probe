@@ -13,7 +13,7 @@ enum {
 volatile uint8_t *uart16550 = (uint8_t *)0x10000000;
 volatile uint32_t *testfinisher = (uint32_t *)0x100000;
 
-int mbi_console_getchar()
+int getchar()
 {
     if (uart16550[UART_REG_LINESTAT] & UART_REG_STATUS_RX) {
         return uart16550[UART_REG_QUEUE];
@@ -22,13 +22,13 @@ int mbi_console_getchar()
     }
 }
 
-void mbi_console_putchar(uint8_t ch)
+int putchar(int ch)
 {
     while ((uart16550[UART_REG_LINESTAT] & UART_REG_STATUS_TX) == 0);
-    uart16550[UART_REG_QUEUE] = ch;
+    return uart16550[UART_REG_QUEUE] = ch & 0xff;
 }
 
-void mbi_poweroff()
+void poweroff()
 {
     *testfinisher = 0x5555;
     while (1) {

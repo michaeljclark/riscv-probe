@@ -1,8 +1,8 @@
 // See LICENSE for license details.
 
 #include <stdint.h>
-#include <string.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <stdbool.h>
 
 int vsnprintf(char* out, size_t n, const char* s, va_list vl)

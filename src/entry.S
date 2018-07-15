@@ -1,7 +1,7 @@
 // See LICENSE for license details.
 
 #include "encoding.h"
-#include "mbi_trap.h"
+#include "trap.h"
 
   .option norvc
   .section .text.init,"ax",@progbits

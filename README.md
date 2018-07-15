@@ -5,7 +5,7 @@ Simple machine mode program to probe RISC-V control and status registers.
 riscv-probe currently works with [Spike](https://github.com/riscv/riscv-isa-sim)
 and [QEMU](https://github.com/riscv/riscv-qemu) and can be used to compare
 control and status registers. It can also be used as a starting point for
-bare metal RISC-V programs using the (MBI) machine binary interface.
+bare metal RISC-V programs that need printf, getchar and putchar.
 
 ## Invocation
 

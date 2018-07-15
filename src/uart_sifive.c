@@ -14,20 +14,20 @@ enum {
 volatile int *uart = (int *)0x10013000;
 volatile uint32_t *testfinisher = (uint32_t *)0x100000;
 
-int mbi_console_getchar()
+int getchar()
 {
     int ch = uart[UART_REG_RXFIFO];
     if (ch < 0) return -1;
     return ch;
 }
 
-void mbi_console_putchar(uint8_t ch)
+int putchar(int ch)
 {
     while (uart[UART_REG_TXFIFO] < 0);
-    uart[UART_REG_TXFIFO] = ch;
+    return uart[UART_REG_TXFIFO] = ch & 0xff;
 }
 
-void mbi_poweroff()
+void poweroff()
 {
     *testfinisher = 0x5555;
     while (1) {

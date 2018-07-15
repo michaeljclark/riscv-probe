@@ -1,17 +1,17 @@
-#include "mbi.h"
+#include "common.h"
 
 static uintptr_t save_mcause;
 
 static void trap_save_cause(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
 	save_mcause = mcause;
-	mbi_write_csr(mepc, mepc + 4);
+	write_csr(mepc, mepc + 4);
 }
 
 static void append_ext(char *str, char ext)
 {
 	char *s = str + strlen(str);
-	if (mbi_ext(ext)) {
+	if (has_ext(ext)) {
 		*s = ext;
 		*(++s) = '\0';
 	}
@@ -20,7 +20,7 @@ static void append_ext(char *str, char ext)
 static const char* isa_string()
 {
 	static char str[32];
-	snprintf(str, sizeof(str), "rv%d", mbi_xlen());
+	snprintf(str, sizeof(str), "rv%d", xlen());
 	append_ext(str, 'i');
 	append_ext(str, 'm');
 	append_ext(str, 'a');
@@ -34,19 +34,19 @@ static const char* isa_string()
 
 static void probe_all_csrs()
 {
-	int *csrenum = mbi_csr_enum_array();
-	const char **csrnames = mbi_csr_name_array();
+	int *csrenum = csr_enum_array();
+	const char **csrnames = csr_name_array();
 	const char* ws = "               ";
-	mbi_register_trap_fn(trap_save_cause);
-	while (*csrenum != mbi_csr_none) {
+	register_trap_fn(trap_save_cause);
+	while (*csrenum != csr_none) {
 		save_mcause = -1;
-		long value = mbi_read_csr_enum(*csrenum);
+		long value = read_csr_enum(*csrenum);
 		const char* csrname = csrnames[*csrenum];
 		if (save_mcause != -1) {
-			mbi_printf("csr: %s%s (not supported) cause=%d\n",
+			printf("csr: %s%s (not supported) cause=%d\n",
 				csrname, ws + strlen(csrname), save_mcause);
 		} else {
-			mbi_printf("csr: %s%s 0x%lx\n",
+			printf("csr: %s%s 0x%lx\n",
 				csrname, ws + strlen(csrname), value);
 		}
 		csrenum++;
@@ -55,8 +55,8 @@ static void probe_all_csrs()
 
 void start_c()
 {
-	mbi_printf("isa: %s\n", isa_string());
+	printf("isa: %s\n", isa_string());
 	probe_all_csrs();
-	mbi_printf("\n");
-	mbi_poweroff();
+	printf("\n");
+	poweroff();
 }
