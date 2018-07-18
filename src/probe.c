@@ -45,6 +45,10 @@ static void probe_all_csrs()
 		if (save_mcause != -1) {
 			printf("csr: %s%s (not supported) cause=%d\n",
 				csrname, ws + strlen(csrname), save_mcause);
+			if (save_mcause == cause_illegal_instruction) {
+				printf("....illegal instruction was: 0x%lx\n",
+					   read_csr_enum(csr_mtval));
+			}
 		} else {
 			printf("csr: %s%s 0x%lx\n",
 				csrname, ws + strlen(csrname), value);
