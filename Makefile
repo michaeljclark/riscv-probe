@@ -1,6 +1,8 @@
-CC_32=riscv64-unknown-elf-gcc -march=rv32imac -mabi=ilp32
-CC_64=riscv64-unknown-elf-gcc -march=rv64imac -mabi=lp64
-AR=riscv64-unknown-elf-ar
+CC ?= riscv64-unknown-elf-gcc
+
+CC_32 ?= ${CC} -march=rv32imac -mabi=ilp32
+CC_64 ?= ${CC} -march=rv64imac -mabi=lp64
+AR ?= ${AR}
 
 CFLAGS=-mcmodel=medany -Os
 LDFLAGS=-nostartfiles -nostdlib -static
