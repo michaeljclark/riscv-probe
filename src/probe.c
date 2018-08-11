@@ -1,5 +1,7 @@
 #include "common.h"
 
+#define MCAUSE_UNSET 0xabbaabba
+
 static uintptr_t save_mcause;
 
 static void trap_save_cause(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
@@ -39,16 +41,16 @@ static void probe_all_csrs()
 	const char* ws = "               ";
 	register_trap_fn(trap_save_cause);
 	while (*csrenum != csr_none) {
-		save_mcause = -1;
+		save_mcause = MCAUSE_UNSET;
 		long value = read_csr_enum(*csrenum);
 		const char* csrname = csrnames[*csrenum];
-		if (save_mcause != -1) {
-			printf("csr: %s%s (not supported) cause=%d\n",
-				csrname, ws + strlen(csrname), save_mcause);
-			if (save_mcause == cause_illegal_instruction) {
-				printf("....illegal instruction was: 0x%lx\n",
-					   read_csr_enum(csr_mtval));
-			}
+		if (save_mcause != MCAUSE_UNSET) {
+			int async = save_mcause < 0;
+			int cause = save_mcause & (((uintptr_t)-1) >> async);
+			printf("csr: %s%s %s cause=0x%x mtval=0x%x\n",
+				csrname, ws + strlen(csrname), cause < 16
+				? (async ? riscv_intr_names : riscv_excp_names)[cause]
+				: "(unknown)", save_mcause, read_csr_enum(csr_mtval));
 		} else {
 			printf("csr: %s%s 0x%lx\n",
 				csrname, ws + strlen(csrname), value);
@@ -59,6 +61,7 @@ static void probe_all_csrs()
 
 void start_c()
 {
+	init();
 	printf("isa: %s\n", isa_string());
 	probe_all_csrs();
 	printf("\n");

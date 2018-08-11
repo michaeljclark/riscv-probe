@@ -4,6 +4,44 @@
 
 static trap_fn tfn = 0;
 
+const char * riscv_excp_names[16] = {
+    "misaligned_fetch",
+    "fault_fetch",
+    "illegal_instruction",
+    "breakpoint",
+    "misaligned_load",
+    "fault_load",
+    "misaligned_store",
+    "fault_store",
+    "user_ecall",
+    "supervisor_ecall",
+    "hypervisor_ecall",
+    "machine_ecall",
+    "exec_page_fault",
+    "load_page_fault",
+    "reserved",
+    "store_page_fault"
+};
+
+const char * riscv_intr_names[16] = {
+    "u_software",
+    "s_software",
+    "h_software",
+    "m_software",
+    "u_timer",
+    "s_timer",
+    "h_timer",
+    "m_timer",
+    "u_external",
+    "s_external",
+    "h_external",
+    "m_external",
+    "reserved",
+    "reserved",
+    "reserved",
+    "reserved"
+};
+
 void register_trap_fn(trap_fn fn)
 {
 	tfn = fn;

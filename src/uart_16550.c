@@ -35,3 +35,5 @@ void poweroff()
         asm volatile("");
     }
 }
+
+void init() {}

@@ -7,6 +7,7 @@
 
 #include "encoding.h"
 
+void init();
 int putchar(int);
 int getchar();
 void poweroff(void) __attribute__((noreturn));
@@ -64,6 +65,9 @@ int* csr_enum_array();
 const char** csr_name_array();
 long read_csr_enum(int csrenum);
 void write_csr_enum(int csrenum, long value);
+
+const char * riscv_excp_names[16];
+const char * riscv_intr_names[16];
 
 enum {
 	cause_misaligned_fetch     = 0,

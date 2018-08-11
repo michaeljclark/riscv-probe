@@ -26,6 +26,11 @@ UART_SIFIVE_LIB = libuart_sifive.a
 UART_SIFIVE_RV32_OBJ = $(addprefix obj/riscv32/,$(UART_SIFIVE_OBJS))
 UART_SIFIVE_RV64_OBJ = $(addprefix obj/riscv64/,$(UART_SIFIVE_OBJS))
 
+UART_SIFIVE_E2_OBJS = uart_sifive_e2.o
+UART_SIFIVE_E2_LIB = libuart_sifive_e2.a
+UART_SIFIVE_E2_RV32_OBJ = $(addprefix obj/riscv32/,$(UART_SIFIVE_E2_OBJS))
+UART_SIFIVE_E2_RV64_OBJ = $(addprefix obj/riscv64/,$(UART_SIFIVE_E2_OBJS))
+
 UART_16550_OBJS = uart_16550.o
 UART_16550_LIB = libuart_16550.a
 UART_16550_RV32_OBJ = $(addprefix obj/riscv32/,$(UART_16550_OBJS))
@@ -35,12 +40,14 @@ SPIKE_LD_SCRIPT=conf/htif_0x80000000.lds
 VIRT_LD_SCRIPT=conf/dram_0x80000000.lds
 SIFIVE_U_LD_SCRIPT=conf/dram_0x80000000.lds
 SIFIVE_E_LD_SCRIPT=conf/nvram_0x20400000.lds
+SIFIVE_E2_LD_SCRIPT=conf/nvram_0x40400000.lds
 
 ALL_PROGRAMS =	bin/riscv32/probe-spike \
 		bin/riscv64/probe-spike \
 		bin/riscv32/probe-virt \
 		bin/riscv64/probe-virt \
 		bin/riscv32/probe-sifive_e \
+		bin/riscv32/probe-sifive_e2 \
 		bin/riscv64/probe-sifive_e \
 		bin/riscv32/probe-sifive_u \
 		bin/riscv64/probe-sifive_u
@@ -82,6 +89,9 @@ lib/riscv64/$(HTIF_LIB): $(HTIF_RV64_OBJ)
 lib/riscv32/$(UART_SIFIVE_LIB): $(UART_SIFIVE_RV32_OBJ)
 	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
 
+lib/riscv32/$(UART_SIFIVE_E2_LIB): $(UART_SIFIVE_E2_RV32_OBJ)
+	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+
 lib/riscv64/$(UART_SIFIVE_LIB): $(UART_SIFIVE_RV64_OBJ)
 	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
 
@@ -105,6 +115,9 @@ bin/riscv64/probe-virt: $(PROBE_RV64_OBJ) lib/riscv64/$(CORE_LIB) lib/riscv64/$(
 
 bin/riscv32/probe-sifive_e: $(PROBE_RV32_OBJ) lib/riscv32/$(CORE_LIB) lib/riscv32/$(UART_SIFIVE_LIB)
 	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${SIFIVE_E_LD_SCRIPT} $^ -o $@
+
+bin/riscv32/probe-sifive_e2: $(PROBE_RV32_OBJ) lib/riscv32/$(CORE_LIB) lib/riscv32/$(UART_SIFIVE_E2_LIB)
+	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${SIFIVE_E2_LD_SCRIPT} $^ -o $@
 
 bin/riscv64/probe-sifive_e: $(PROBE_RV64_OBJ) lib/riscv64/$(CORE_LIB) lib/riscv64/$(UART_SIFIVE_LIB)
 	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${SIFIVE_E_LD_SCRIPT} $^ -o $@

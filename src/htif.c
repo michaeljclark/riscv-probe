@@ -92,3 +92,5 @@ void poweroff()
     tohost = 1;
   }
 }
+
+void init() {}
