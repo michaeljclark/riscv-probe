@@ -3,11 +3,14 @@
 #include <stdint.h>
 
 enum {
+    /* UART Registers */
     UART_REG_TXFIFO = 0,
     UART_REG_RXFIFO = 1,
     UART_REG_TXCTRL = 2,
     UART_REG_RXCTRL = 3,
-    UART_REG_DIV = 4
+    UART_REG_IE     = 4,
+    UART_REG_IP     = 5,
+    UART_REG_DIV    = 6
 };
 
 /* UART0 address on riscv-qemu 'sifive_e' and 'sifive_u' machines */
