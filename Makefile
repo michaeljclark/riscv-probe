@@ -4,7 +4,7 @@ CC_32 = $(RISCV_PREFIX)gcc -march=rv32imac -mabi=ilp32
 CC_64 = $(RISCV_PREFIX)gcc -march=rv64imac -mabi=lp64
 AR    = $(RISCV_PREFIX)ar
 
-CFLAGS=-mcmodel=medany -Os
+CFLAGS=-mcmodel=medany -Os -g
 LDFLAGS=-nostartfiles -nostdlib -static
 
 PROBE_OBJ = probe.o
