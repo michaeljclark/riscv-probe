@@ -2,73 +2,41 @@ OUTPUT_ARCH( "riscv" )
 
 ENTRY( reset_vector )
 
+MEMORY
+{
+  ram   (wxa!ri) : ORIGIN = 0x80000000, LENGTH = 128M
+}
+
+PHDRS
+{
+  text PT_LOAD;
+  data PT_LOAD;
+  bss PT_LOAD;
+}
+
 SECTIONS
 {
-
-  /*--------------------------------------------------------------------*/
-  /* Code and read-only segment                                         */
-  /*--------------------------------------------------------------------*/
-
-  . = 0x80000000;
-
-  /* text: Program code section */
-  .text :
-  {
+  .text : {
     *(.text.init)
-    *(.text)
-    *(.text.*)
-    *(.gnu.linkonce.t.*)
-  }
+    *(.text .text.*)
+  } >ram AT>ram :text
 
-  /* rodata: Read-only data */
-  .rodata :
-  {
-    *(.rdata)
-    *(.rodata)
-    *(.rodata.*)
-    *(.gnu.linkonce.r.*)
-  }
+  .rodata : {
+    *(.rodata .rodata.*)
+  } >ram AT>ram :text
 
-  /*--------------------------------------------------------------------*/
-  /* HTIF, isolated onto separate page                                  */
-  /*--------------------------------------------------------------------*/
+  .data : {
+    *(.sdata .sdata.*)
+    *(.data .data.*)
+  } >ram AT>ram :data
 
-  . = ALIGN(0x1000);
-  .htif :
-  {
+  .htif : {
+    . = ALIGN(1024);
     *(.htif)
-  }
-  . = ALIGN(0x1000);
+  } >ram AT>ram :data
 
-  /*--------------------------------------------------------------------*/
-  /* Initialized data segment                                           */
-  /*--------------------------------------------------------------------*/
-
-  . = ALIGN(16);
-
-  /* data: Writable data */
-  .data :
-  {
-    *(.data)
-    *(.data.*)
-    *(.srodata*)
-    *(.gnu.linkonce.d.*)
-    *(.comment)
-  }
-
-  /*--------------------------------------------------------------------*/
-  /* Uninitialized data segment                                         */
-  /*--------------------------------------------------------------------*/
-
-  . = ALIGN(16);
-
-  /* bss: Uninitialized writeable data section */
-  .bss :
-  {
-    *(.bss)
-    *(.bss.*)
-    *(.sbss*)
-    *(.gnu.linkonce.b.*)
-    *(COMMON)
-  }
+  .bss : {
+    *(.sbss .sbss.*)
+    *(.bss .bss.*)
+  } >ram AT>ram :bss
 }
