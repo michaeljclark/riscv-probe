@@ -59,11 +59,9 @@ static void probe_all_csrs()
 	}
 }
 
-void start_c()
+int main()
 {
-	init();
 	printf("isa: %s\n", isa_string());
 	probe_all_csrs();
 	printf("\n");
-	poweroff();
 }

@@ -99,7 +99,9 @@ do_reset:
 
   # load stack pointer and jump to start_c
   la sp, stacks + RISCV_PGSIZE - MENTRY_FRAME_SIZE
-  j start_c
+  jal init
+  jal main
+  j poweroff
 
   .bss
   .align 4
