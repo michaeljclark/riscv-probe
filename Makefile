@@ -11,7 +11,7 @@ EXAMPLE_PROBE_OBJ            = probe.o
 EXAMPLE_PROBE_RV32_OBJ       = $(addprefix build/obj/rv32/example/,$(EXAMPLE_PROBE_OBJ))
 EXAMPLE_PROBE_RV64_OBJ       = $(addprefix build/obj/rv64/example/,$(EXAMPLE_PROBE_OBJ))
 
-LIBFEMTO_LIB                 = libcore.a
+LIBFEMTO_LIB                 = libfemto.a
 LIBFEMTO_SRCS                = $(sort $(wildcard libfemto/*.c))
 LIBFEMTO_ASM                 = $(sort $(wildcard libfemto/*.S))
 LIBFEMTO_OBJS                = $(patsubst %.S,%.o,$(LIBFEMTO_ASM)) $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
