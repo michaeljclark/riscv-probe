@@ -1,7 +1,8 @@
-#ifndef RISCV_MBI_H
-#define RISCV_MBI_H
+#ifndef FEMTO_H
+#define FEMTO_H
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdarg.h>
 
@@ -12,14 +13,15 @@ int putchar(int);
 int getchar();
 void poweroff(void) __attribute__((noreturn));
 
-int vsnprintf(char* out, size_t n, const char* s, va_list vl);
-int snprintf(char* out, size_t n, const char* s, ...);
+int memcmp(const void *s1, const void *s2, size_t n);
+void *memcpy(void *dest, const void *src, size_t n);
+void *memset(void *dest, int c, size_t n);
 int printf(const char* s, ...);
-
-static inline size_t strlen(const char* s)
-{
-  size_t c = 0; while (*s++) c++; return c;
-}
+int snprintf(char* out, size_t n, const char* s, ...);
+size_t strlen(const char* s);
+char *strncpy(char *dst, const char *src, size_t n);
+int vprintf(const char* s, va_list vl);
+int vsnprintf(char* out, size_t n, const char* s, va_list vl);
 
 static inline void putstring(const char* s)
 {

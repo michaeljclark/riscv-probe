@@ -1,6 +1,6 @@
 #include "encoding.h"
 #include "trap.h"
-#include "common.h"
+#include "femto.h"
 
 static trap_fn tfn = 0;
 

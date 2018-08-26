@@ -11,10 +11,12 @@ EXAMPLE_PROBE_OBJ            = probe.o
 EXAMPLE_PROBE_RV32_OBJ       = $(addprefix build/obj/rv32/example/,$(EXAMPLE_PROBE_OBJ))
 EXAMPLE_PROBE_RV64_OBJ       = $(addprefix build/obj/rv64/example/,$(EXAMPLE_PROBE_OBJ))
 
-LIBFEMTO_OBJS                = entry.o trap.o csr.o snprintf.o printf.o
 LIBFEMTO_LIB                 = libcore.a
-LIBFEMTO_RV32_OBJ            = $(addprefix build/obj/rv32/libfemto/,$(LIBFEMTO_OBJS))
-LIBFEMTO_RV64_OBJ            = $(addprefix build/obj/rv64/libfemto/,$(LIBFEMTO_OBJS))
+LIBFEMTO_SRCS                = $(sort $(wildcard libfemto/*.c))
+LIBFEMTO_ASM                 = $(sort $(wildcard libfemto/*.S))
+LIBFEMTO_OBJS                = $(patsubst %.S,%.o,$(LIBFEMTO_ASM)) $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
+LIBFEMTO_RV32_OBJ            = $(addprefix build/obj/rv32/,$(LIBFEMTO_OBJS))
+LIBFEMTO_RV64_OBJ            = $(addprefix build/obj/rv64/,$(LIBFEMTO_OBJS))
 
 UART_SPIKE_HTIF_OBJS         = uart_spike_htif.o
 UART_SPIKE_HTIF_LIB          = libuart_spike_htif.a

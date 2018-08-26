@@ -1,4 +1,4 @@
-#include "common.h"
+#include "femto.h"
 
 static int all_csr_enums[] = {
 	csr_fflags,

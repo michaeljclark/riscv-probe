@@ -1,18 +1,6 @@
 // See LICENSE for license details.
 
-#include <stdint.h>
-#include <stdarg.h>
-#include <stddef.h>
-
-#include "common.h"
-
-int vprintf(const char* s, va_list vl)
-{
-  char buf[256];
-  int res = vsnprintf(buf, sizeof buf, s, vl);
-  putstring(buf);
-  return res;
-}
+#include "femto.h"
 
 int printf(const char* s, ...)
 {
