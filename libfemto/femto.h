@@ -6,8 +6,6 @@
 #include <stddef.h>
 #include <stdarg.h>
 
-#include "encoding.h"
-
 void init();
 int putchar(int);
 int getchar();
@@ -148,6 +146,5 @@ enum {
 	csr_sip,
 	csr_satp
 };
-
 
 #endif
