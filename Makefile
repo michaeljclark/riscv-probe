@@ -64,6 +64,20 @@ clean:
 backup: clean
 	tar czf ../$(shell basename $(shell pwd)).tar.gz .
 
+spike: all
+	spike --isa=RV32IMAFDC build/bin/rv32/probe-spike
+	spike --isa=RV64IMAFDC build/bin/rv64/probe-spike
+
+qemu: all
+	qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/probe-spike
+	qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/probe-spike
+	qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32/probe-virt
+	qemu-system-riscv64 -nographic -machine virt -kernel build/bin/rv64/probe-virt
+	qemu-system-riscv32 -nographic -machine sifive_e -kernel build/bin/rv32/probe-qemu-sifive_e
+	qemu-system-riscv64 -nographic -machine sifive_e -kernel build/bin/rv64/probe-qemu-sifive_e
+	qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32/probe-qemu-sifive_u
+	qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64/probe-qemu-sifive_u
+
 ifdef V
 cmd = @mkdir -p $2 ; echo "$3"; $3
 else
