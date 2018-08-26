@@ -1,11 +1,12 @@
 RISCV_PREFIX ?= riscv64-unknown-elf-
 
-CC_32   = $(RISCV_PREFIX)gcc -march=rv32imac -mabi=ilp32
-CC_64   = $(RISCV_PREFIX)gcc -march=rv64imac -mabi=lp64
-AR      = $(RISCV_PREFIX)ar
+CC_32    = $(RISCV_PREFIX)gcc -march=rv32imac -mabi=ilp32 -Ienv/common/rv32
+CC_64    = $(RISCV_PREFIX)gcc -march=rv64imac -mabi=lp64  -Ienv/common/rv64
+AR       = $(RISCV_PREFIX)ar
 
-CFLAGS  = -mcmodel=medany -Os -Ilibfemto
-LDFLAGS = -nostartfiles -nostdlib -static -Wl,--nmagic
+CFLAGS   = -mcmodel=medany -Os
+LDFLAGS  = -nostartfiles -nostdlib -static -Wl,--nmagic
+INCLUDES = -Ienv/common -Ilibfemto
 
 EXAMPLE_PROBE_OBJ            = probe.o
 EXAMPLE_PROBE_RV32_OBJ       = $(addprefix build/obj/rv32/example/,$(EXAMPLE_PROBE_OBJ))
@@ -13,8 +14,8 @@ EXAMPLE_PROBE_RV64_OBJ       = $(addprefix build/obj/rv64/example/,$(EXAMPLE_PRO
 
 LIBFEMTO_LIB                 = libfemto.a
 LIBFEMTO_SRCS                = $(sort $(wildcard libfemto/*.c))
-LIBFEMTO_ASM                 = $(sort $(wildcard libfemto/*.S))
-LIBFEMTO_OBJS                = $(patsubst %.S,%.o,$(LIBFEMTO_ASM)) $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
+LIBFEMTO_ASM                 = $(sort $(wildcard libfemto/*.s))
+LIBFEMTO_OBJS                = $(patsubst %.s,%.o,$(LIBFEMTO_ASM)) $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
 LIBFEMTO_RV32_OBJ            = $(addprefix build/obj/rv32/,$(LIBFEMTO_OBJS))
 LIBFEMTO_RV64_OBJ            = $(addprefix build/obj/rv64/,$(LIBFEMTO_OBJS))
 
@@ -84,17 +85,17 @@ else
 cmd = @echo "$1"; mkdir -p $2 ; $3
 endif
 
-build/obj/rv32/%.o: %.S
-	$(call cmd,AS.32 $@,$(@D),$(CC_32) $(CFLAGS) -c $^ -o $@)
+build/obj/rv32/%.o: %.s
+	$(call cmd,AS.32 $@,$(@D),$(CC_32) $(CFLAGS) $(INCLUDES) -c $^ -o $@)
 
-build/obj/rv64/%.o: %.S
-	$(call cmd,AS.64 $@,$(@D),$(CC_64) $(CFLAGS) -c $^ -o $@)
+build/obj/rv64/%.o: %.s
+	$(call cmd,AS.64 $@,$(@D),$(CC_64) $(CFLAGS) $(INCLUDES) -c $^ -o $@)
 
 build/obj/rv32/%.o: %.c
-	$(call cmd,CC.32 $@,$(@D),$(CC_32) $(CFLAGS) -c $^ -o $@)
+	$(call cmd,CC.32 $@,$(@D),$(CC_32) $(CFLAGS) $(INCLUDES) -c $^ -o $@)
 
 build/obj/rv64/%.o: %.c
-	$(call cmd,CC.64 $@,$(@D),$(CC_64) $(CFLAGS) -c $^ -o $@)
+	$(call cmd,CC.64 $@,$(@D),$(CC_64) $(CFLAGS) $(INCLUDES) -c $^ -o $@)
 
 build/lib/rv32/$(LIBFEMTO_LIB): $(LIBFEMTO_RV32_OBJ)
 	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
