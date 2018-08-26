@@ -2,7 +2,6 @@
 
 #include "atomic.h"
 #include "encoding.h"
-#include "trap.h"
 #include "femto.h"
 
 # define TOHOST_CMD(dev, cmd, payload) \
