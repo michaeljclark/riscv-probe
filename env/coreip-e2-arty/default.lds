@@ -9,26 +9,19 @@ SECTIONS
   /* Code and read-only segment                                         */
   /*--------------------------------------------------------------------*/
 
-  /* Begining of code and text segment */
-  . = 0x80000000;
-  _ftext = .;
-  PROVIDE( eprol = . );
+  . = 0x40400000;
 
+  /* text: Program code section */
   .text :
   {
     *(.text.init)
-  }
-
-  /* text: Program code section */
-  .text : 
-  {
     *(.text)
     *(.text.*)
     *(.gnu.linkonce.t.*)
   }
 
   /* rodata: Read-only data */
-  .rodata : 
+  .rodata :
   {
     *(.rdata)
     *(.rodata)
@@ -36,30 +29,14 @@ SECTIONS
     *(.gnu.linkonce.r.*)
   }
 
-  /* End of code and read-only segment */
-  PROVIDE( etext = . );
-  _etext = .;
-
-  /*--------------------------------------------------------------------*/
-  /* HTIF, isolated onto separate page                                  */
-  /*--------------------------------------------------------------------*/
-  . = ALIGN(0x1000);
-  .htif :
-  {
-    *(.htif)
-  }
-  . = ALIGN(0x1000);
-
   /*--------------------------------------------------------------------*/
   /* Initialized data segment                                           */
   /*--------------------------------------------------------------------*/
 
-  /* Start of initialized data segment */
-  . = ALIGN(16);
-   _fdata = .;
+  . = 0x80000000;
 
   /* data: Writable data */
-  .data : 
+  .data :
   {
     *(.data)
     *(.data.*)
@@ -68,21 +45,14 @@ SECTIONS
     *(.comment)
   }
 
-  /* End of initialized data segment */
-  . = ALIGN(4);
-  PROVIDE( edata = . );
-  _edata = .;
-
   /*--------------------------------------------------------------------*/
   /* Uninitialized data segment                                         */
   /*--------------------------------------------------------------------*/
 
-  . = .;
+  . = ALIGN(16);
 
   /* bss: Uninitialized writeable data section */
-  . = .;
-  _bss_start = .;
-  .bss : 
+  .bss :
   {
     *(.bss)
     *(.bss.*)
@@ -90,6 +60,4 @@ SECTIONS
     *(.gnu.linkonce.b.*)
     *(COMMON)
   }
-
-  _end = .;
 }
