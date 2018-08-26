@@ -11,56 +11,55 @@
 .globl reset_vector
 
 reset_vector:
-    j do_reset
+    j       do_reset
 
     .align 2
 trap_vector:
-    addi sp, sp, -CONTEXT_SIZE
-
     # Save registers.
-    sx ra,0*REGBYTES(sp)
-    sx a0,1*REGBYTES(sp)
-    sx a1,2*REGBYTES(sp)
-    sx a2,3*REGBYTES(sp)
-    sx a3,4*REGBYTES(sp)
-    sx a4,5*REGBYTES(sp)
-    sx a5,6*REGBYTES(sp)
-    sx a6,7*REGBYTES(sp)
-    sx a7,8*REGBYTES(sp)
-    sx t0,9*REGBYTES(sp)
-    sx t1,10*REGBYTES(sp)
-    sx t2,11*REGBYTES(sp)
-    sx t3,12*REGBYTES(sp)
-    sx t4,13*REGBYTES(sp)
-    sx t5,14*REGBYTES(sp)
-    sx t6,15*REGBYTES(sp)
-
-    mv a0, sp          # a0 <- regs
-    csrr a1, mcause    # a1 <- mcause
-    csrr a2, mepc      # a2 <- mepc
+    addi    sp, sp, -CONTEXT_SIZE
+    sxsp    ra, 0
+    sxsp    a0, 1
+    sxsp    a1, 2
+    sxsp    a2, 3
+    sxsp    a3, 4
+    sxsp    a4, 5
+    sxsp    a5, 6
+    sxsp    a6, 7
+    sxsp    a7, 8
+    sxsp    t0, 9
+    sxsp    t1, 10
+    sxsp    t2, 11
+    sxsp    t3, 12
+    sxsp    t4, 13
+    sxsp    t5, 14
+    sxsp    t6, 15
 
     # Invoke the handler.
-    jal trap_handler
+    mv      a0, sp
+    csrr    a1, mcause
+    csrr    a2, mepc
+    jal     trap_handler
 
     # Restore registers.
-    lx ra,0*REGBYTES(sp)
-    lx a0,1*REGBYTES(sp)
-    lx a1,2*REGBYTES(sp)
-    lx a2,3*REGBYTES(sp)
-    lx a3,4*REGBYTES(sp)
-    lx a4,5*REGBYTES(sp)
-    lx a5,6*REGBYTES(sp)
-    lx a6,7*REGBYTES(sp)
-    lx a7,8*REGBYTES(sp)
-    lx t0,9*REGBYTES(sp)
-    lx t1,10*REGBYTES(sp)
-    lx t2,11*REGBYTES(sp)
-    lx t3,12*REGBYTES(sp)
-    lx t4,13*REGBYTES(sp)
-    lx t5,14*REGBYTES(sp)
-    lx t6,15*REGBYTES(sp)
-
+    lxsp    ra, 0
+    lxsp    a0, 1
+    lxsp    a1, 2
+    lxsp    a2, 3
+    lxsp    a3, 4
+    lxsp    a4, 5
+    lxsp    a5, 6
+    lxsp    a6, 7
+    lxsp    a7, 8
+    lxsp    t0, 9
+    lxsp    t1, 10
+    lxsp    t2, 11
+    lxsp    t3, 12
+    lxsp    t4, 13
+    lxsp    t5, 14
+    lxsp    t6, 15
     addi sp, sp, CONTEXT_SIZE
+
+    # Return
     mret
 
 do_reset:
