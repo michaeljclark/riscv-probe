@@ -64,68 +64,74 @@ clean:
 backup: clean
 	tar czf ../$(shell basename $(shell pwd)).tar.gz .
 
+ifdef V
+cmd = @mkdir -p $2 ; echo "$3"; $3
+else
+cmd = @echo "$1"; mkdir -p $2 ; $3
+endif
+
 build/obj/rv32/%.o: %.S
-	@echo AS.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(CFLAGS) -c $^ -o $@
+	$(call cmd,AS.32 $@,$(@D),$(CC_32) $(CFLAGS) -c $^ -o $@)
 
 build/obj/rv64/%.o: %.S
-	@echo AS.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(CFLAGS) -c $^ -o $@
+	$(call cmd,AS.64 $@,$(@D),$(CC_64) $(CFLAGS) -c $^ -o $@)
 
 build/obj/rv32/%.o: %.c
-	@echo CC.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(CFLAGS) -c $^ -o $@
+	$(call cmd,CC.32 $@,$(@D),$(CC_32) $(CFLAGS) -c $^ -o $@)
 
 build/obj/rv64/%.o: %.c
-	@echo CC.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(CFLAGS) -c $^ -o $@
+	$(call cmd,CC.64 $@,$(@D),$(CC_64) $(CFLAGS) -c $^ -o $@)
 
 build/lib/rv32/$(LIBFEMTO_LIB): $(LIBFEMTO_RV32_OBJ)
-	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv64/$(LIBFEMTO_LIB): $(LIBFEMTO_RV64_OBJ)
-	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.64 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv32/$(UART_SPIKE_HTIF_LIB): $(UART_SPIKE_HTIF_RV32_OBJ)
-	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv64/$(UART_SPIKE_HTIF_LIB): $(UART_SPIKE_HTIF_RV64_OBJ)
-	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.64 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv32/$(UART_QEMU_SIFIVE_LIB): $(UART_QEMU_SIFIVE_RV32_OBJ)
-	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv32/$(UART_COREIP_E2_ARTY_LIB): $(UART_COREIP_E2_ARTY_RV32_OBJ)
-	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv64/$(UART_QEMU_SIFIVE_LIB): $(UART_QEMU_SIFIVE_RV64_OBJ)
-	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.64 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv32/$(UART_VIRT_16550_LIB): $(UART_VIRT_16550_RV32_OBJ)
-	@echo AR.32 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.32 $@,$(@D),$(AR) cr $@ $^)
 
 build/lib/rv64/$(UART_VIRT_16550_LIB): $(UART_VIRT_16550_RV64_OBJ)
-	@echo AR.64 $@ ; mkdir -p $(@D) ; $(AR) cr $@ $^
+	$(call cmd,AR.64 $@,$(@D),$(AR) cr $@ $^)
 
 build/bin/rv32/probe-spike: $(EXAMPLE_PROBE_RV32_OBJ) build/lib/rv32/$(LIBFEMTO_LIB) build/lib/rv32/$(UART_SPIKE_HTIF_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${ENV_SPIKE_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.32 $@,$(@D),$(CC_32) $(LDFLAGS) -T ${ENV_SPIKE_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv64/probe-spike: $(EXAMPLE_PROBE_RV64_OBJ) build/lib/rv64/$(LIBFEMTO_LIB) build/lib/rv64/$(UART_SPIKE_HTIF_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${ENV_SPIKE_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.64 $@,$(@D),$(CC_64) $(LDFLAGS) -T ${ENV_SPIKE_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv32/probe-virt: $(EXAMPLE_PROBE_RV32_OBJ) build/lib/rv32/$(LIBFEMTO_LIB) build/lib/rv32/$(UART_VIRT_16550_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${ENV_VIRT_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.32 $@,$(@D),$(CC_32) $(LDFLAGS) -T ${ENV_VIRT_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv64/probe-virt: $(EXAMPLE_PROBE_RV64_OBJ) build/lib/rv64/$(LIBFEMTO_LIB) build/lib/rv64/$(UART_VIRT_16550_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${ENV_VIRT_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.64 $@,$(@D),$(CC_64) $(LDFLAGS) -T ${ENV_VIRT_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv32/probe-qemu-sifive_e: $(EXAMPLE_PROBE_RV32_OBJ) build/lib/rv32/$(LIBFEMTO_LIB) build/lib/rv32/$(UART_QEMU_SIFIVE_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_E_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.32 $@,$(@D),$(CC_32) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_E_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv64/probe-qemu-sifive_e: $(EXAMPLE_PROBE_RV64_OBJ) build/lib/rv64/$(LIBFEMTO_LIB) build/lib/rv64/$(UART_QEMU_SIFIVE_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_E_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.64 $@,$(@D),$(CC_64) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_E_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv32/probe-qemu-sifive_u: $(EXAMPLE_PROBE_RV32_OBJ) build/lib/rv32/$(LIBFEMTO_LIB) build/lib/rv32/$(UART_QEMU_SIFIVE_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_U_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.32 $@,$(@D),$(CC_32) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_U_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv64/probe-qemu-sifive_u: $(EXAMPLE_PROBE_RV64_OBJ) build/lib/rv64/$(LIBFEMTO_LIB) build/lib/rv64/$(UART_QEMU_SIFIVE_LIB)
-	@echo LD.64 $@ ; mkdir -p $(@D) ; $(CC_64) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_U_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.64 $@,$(@D),$(CC_64) $(LDFLAGS) -T ${ENV_QEMU_SIFIVE_U_LD_SCRIPT} $^ -o $@)
 
 build/bin/rv32/probe-coreip-e2-arty: $(EXAMPLE_PROBE_RV32_OBJ) build/lib/rv32/$(LIBFEMTO_LIB) build/lib/rv32/$(UART_COREIP_E2_ARTY_LIB)
-	@echo LD.32 $@ ; mkdir -p $(@D) ; $(CC_32) $(LDFLAGS) -T ${ENV_COREIP_E2_ARTY_LD_SCRIPT} $^ -o $@
+	$(call cmd,LD.32 $@,$(@D),$(CC_32) $(LDFLAGS) -T ${ENV_COREIP_E2_ARTY_LD_SCRIPT} $^ -o $@)
