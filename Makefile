@@ -4,8 +4,8 @@ CC_32   = $(RISCV_PREFIX)gcc -march=rv32imac -mabi=ilp32
 CC_64   = $(RISCV_PREFIX)gcc -march=rv64imac -mabi=lp64
 AR      = $(RISCV_PREFIX)ar
 
-CFLAGS  = -mcmodel=medany -g -Os -Ilibfemto
-LDFLAGS = -nostartfiles -nostdlib -static
+CFLAGS  = -mcmodel=medany -Os -Ilibfemto
+LDFLAGS = -nostartfiles -nostdlib -static -Wl,--nmagic
 
 EXAMPLE_PROBE_OBJ            = probe.o
 EXAMPLE_PROBE_RV32_OBJ       = $(addprefix build/obj/rv32/example/,$(EXAMPLE_PROBE_OBJ))
