@@ -9,6 +9,7 @@
 
 .section .text.init,"ax",@progbits
 .globl reset_vector
+.weak reset_vector
 
 reset_vector:
     j       do_reset

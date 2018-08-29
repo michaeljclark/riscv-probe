@@ -8,7 +8,8 @@ CC_rv64            = $(RISCV_PREFIX)gcc $(CFLAGS_rv64)
 AR                 = $(RISCV_PREFIX)ar
 
 CFLAGS             = -mcmodel=medany -Os
-LDFLAGS            = -nostartfiles -nostdlib -static -Wl,--nmagic
+LDFLAGS            = -nostartfiles -nostdlib -static \
+                     -Wl,--nmagic -Wl,--gc-sections
 INCLUDES           = -Ienv/common -Ilibfemto
 
 LIBFEMTO_SRCS      = $(sort $(wildcard libfemto/*.c))
