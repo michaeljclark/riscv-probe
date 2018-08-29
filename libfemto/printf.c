@@ -11,4 +11,3 @@ int printf(const char* s, ...)
   va_end(vl);
   return res;
 }
-
