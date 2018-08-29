@@ -8,10 +8,10 @@
 #
 
 .section .text.init,"ax",@progbits
-.globl reset_vector
-.weak reset_vector
+.globl _start
+.weak _start
 
-reset_vector:
+_start:
     j       do_reset
 
     .align 2

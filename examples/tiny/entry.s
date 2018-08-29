@@ -8,9 +8,9 @@
 #
 
 .section .text.init,"ax",@progbits
-.globl reset_vector
+.globl _start
 
-reset_vector:
+_start:
     la      sp, stacks + STACK_SIZE
     jal     init
     jal     main

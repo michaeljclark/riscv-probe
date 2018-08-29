@@ -1,6 +1,6 @@
 OUTPUT_ARCH( "riscv" )
 
-ENTRY( reset_vector )
+ENTRY( _start )
 
 MEMORY
 {
