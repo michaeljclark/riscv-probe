@@ -109,7 +109,7 @@ configs = rv32:spike:libuart_spike_htif.a \
 # Build system functions to generate build rules for examples
 #
 
-build_dirs = example
+build_dirs = examples
 sub_makes := $(foreach dir,$(build_dirs),$(wildcard ${dir}/*/rules.mk))
 $(foreach makefile,$(sub_makes),$(eval include $(makefile)))
 sub_dirs := $(foreach m,$(sub_makes),$(m:/rules.mk=))
