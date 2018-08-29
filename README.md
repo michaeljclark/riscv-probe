@@ -11,32 +11,29 @@ riscv-probe contains libfemto which is a lightweight bare-metal C library that c
 be used as a starting point for bare metal RISC-V programs that need printf,
 interrupt handling, basic string routines, getchar and putchar.
 
+## Build
+
+To build the examples:
+
+```
+make
+```
+
 ## Invocation
 
-probe example invocations in spike and RISC-V QEMU:
+To invoke the probe example in spike and RISC-V QEMU:
 
 - `$ spike --isa=RV32IMAFDC build/bin/rv32/probe-htif`
 - `$ spike --isa=RV64IMAFDC build/bin/rv64/probe-htif`
-- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/probe-spike`
-- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/probe-spike`
-- `$ qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32/probe-virt`
-- `$ qemu-system-riscv64 -nographic -machine virt -kernel build/bin/rv64/probe-virt`
-- `$ qemu-system-riscv32 -nographic -machine sifive_e -kernel build/bin/rv32/probe-qemu-sifive_e`
-- `$ qemu-system-riscv64 -nographic -machine sifive_e -kernel build/bin/rv64/probe-qemu-sifive_e`
-- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32/probe-qemu-sifive_u`
-- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64/probe-qemu-sifive_u`
+- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/spike/probe`
+- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/spike/probe`
+- `$ qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32/virt/probe`
+- `$ qemu-system-riscv64 -nographic -machine virt -kernel build/bin/rv64/virt/probe`
+- `$ qemu-system-riscv32 -nographic -machine sifive_e -kernel build/bin/rv32/qemu-sifive_e/probe`
+- `$ qemu-system-riscv64 -nographic -machine sifive_e -kernel build/bin/rv64/qemu-sifive_e/probe`
+- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32/qemu-sifive_u/probe`
+- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64/qemu-sifive_u/probe`
 
-To invoke probe in spike (riscv-isa-sim):
-
-```
-make spike
-```
-
-To invoke probe in RISC-V QEMU:
-
-```
-make qemu
-```
 
 ### riscv-probe in qemu-system-riscv32
 
