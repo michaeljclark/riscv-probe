@@ -7,6 +7,8 @@
 # start of trap handler
 #
 
+.equ MSTATUS_MPP, 0x00001800
+
 .section .text.init,"ax",@progbits
 .globl _start
 .weak _start
@@ -64,6 +66,9 @@ trap_vector:
     mret
 
 do_reset:
+    # libfemto bare-metal code expects mret to return to M-mode
+    li      t0, MSTATUS_MPP
+    csrs    mstatus, t0
     la      t0, trap_vector
     csrw    mtvec, t0
     csrr    t0, mhartid
