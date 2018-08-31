@@ -27,6 +27,10 @@ char *strncpy(char *dst, const char *src, size_t n);
 int vprintf(const char* s, va_list vl);
 int vsnprintf(char* out, size_t n, const char* s, va_list vl);
 
+void* malloc(size_t size);
+void free(void* ptr);
+void malloc_addblock(void* addr, size_t size);
+
 #define die(str, ...) ({ \
 	printf("%s:%d: " str "\n", __FILE__, __LINE__, ##__VA_ARGS__); \
 	poweroff(); })
