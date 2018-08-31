@@ -17,8 +17,27 @@ PHDRS
 
 SECTIONS
 {
-  .text   : { *(.text.init) *(.text .text.*) }      >flash AT>flash :text
-  .rodata : { *(.rodata .rodata.*) }                >flash AT>flash :text
-  .data   : { *(.sdata .sdata.*) *(.data .data.*) } >ram AT>ram :data
-  .bss    : { *(.sbss .sbss.*) *(.bss .bss.*) }     >ram AT>ram :bss
+  .text : {
+    PROVIDE(_text_start = .);
+    *(.text.init) *(.text .text.*)
+    PROVIDE(_text_end = .);
+  } >flash AT>flash :text
+
+  .rodata : {
+    PROVIDE(_rodata_start = .);
+    *(.rodata .rodata.*)
+    PROVIDE(_rodata_end = .);
+  } >flash AT>flash :text
+
+  .data : {
+    PROVIDE(_data_start = .);
+    *(.sdata .sdata.*) *(.data .data.*)
+    PROVIDE(_data_end = .);
+  } >ram AT>ram :data
+
+  .bss :{
+    PROVIDE(_bss_start = .);
+    *(.sbss .sbss.*) *(.bss .bss.*)
+    PROVIDE(_bss_end = .);
+  } >ram AT>ram :bss
 }
