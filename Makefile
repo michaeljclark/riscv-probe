@@ -7,7 +7,7 @@ CC_rv32            = $(RISCV_PREFIX)gcc $(CFLAGS_rv32)
 CC_rv64            = $(RISCV_PREFIX)gcc $(CFLAGS_rv64)
 AR                 = $(RISCV_PREFIX)ar
 
-CFLAGS             = -mcmodel=medany -Os
+CFLAGS             = -mcmodel=medany -Os -ffunction-sections
 LDFLAGS            = -nostartfiles -nostdlib -static \
                      -Wl,--nmagic -Wl,--gc-sections
 INCLUDES           = -Ienv/common -Ilibfemto
