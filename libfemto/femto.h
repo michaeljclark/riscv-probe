@@ -1,5 +1,10 @@
-#ifndef FEMTO_H
-#define FEMTO_H
+// See LICENSE for license details.
+
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -143,4 +148,6 @@ enum {
 	csr_satp
 };
 
+#ifdef __cplusplus
+}
 #endif

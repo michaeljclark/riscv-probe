@@ -1,7 +1,10 @@
 // See LICENSE for license details.
 
-#ifndef _RISCV_ATOMIC_H
-#define _RISCV_ATOMIC_H
+#pragma once
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Currently, interrupts are always disabled in M-mode.
 #define disable_irqsave() (0)
@@ -72,4 +75,6 @@ static inline void spinlock_unlock_irqrestore(spinlock_t* lock, long flags)
   enable_irqrestore(flags);
 }
 
+#ifdef __cplusplus
+}
 #endif
