@@ -10,28 +10,20 @@ static void trap_save_cause(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 	write_csr(mepc, mepc + 4);
 }
 
-static void append_ext(char *str, char ext)
+static const char* isa_string(char *buf, size_t bufsz)
 {
-	char *s = str + strlen(str);
-	if (has_ext(ext)) {
-		*s = ext;
-		*(++s) = '\0';
-	}
-}
+	static const char *ext = "iemafdqlcbjtpvnsu";
 
-static const char* isa_string()
-{
-	static char str[32];
-	snprintf(str, sizeof(str), "rv%d", xlen());
-	append_ext(str, 'i');
-	append_ext(str, 'm');
-	append_ext(str, 'a');
-	append_ext(str, 'f');
-	append_ext(str, 'd');
-	append_ext(str, 'c');
-	append_ext(str, 's');
-	append_ext(str, 'u');
-	return str;
+	const char *p = ext;
+	char *q = buf + snprintf(buf, bufsz, "rv%d", xlen());
+	do {
+		if (has_ext(*p)) {
+			*q++ = *p;
+		}
+	} while (*++p);
+	*q = '\0';
+
+	return buf;
 }
 
 static void probe_all_csrs()
@@ -61,7 +53,8 @@ static void probe_all_csrs()
 
 int main()
 {
-	printf("isa: %s\n", isa_string());
+	char buf[32];
+	printf("isa: %s\n", isa_string(buf, sizeof(buf)));
 	probe_all_csrs();
 	printf("\n");
 }
