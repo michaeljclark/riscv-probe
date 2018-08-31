@@ -55,6 +55,20 @@ void malloc_addblock(void* addr, size_t size);
 #define clear_csr(reg, bit) ({ unsigned long __tmp; \
   asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); __tmp; })
 
+static inline void mret() {
+  asm volatile ("mret");
+}
+
+static inline uintptr_t get_field(uintptr_t reg, uintptr_t mask)
+{
+	return ((reg & mask) / (mask & ~(mask << 1)));
+}
+
+static inline uintptr_t set_field(uintptr_t reg, uintptr_t mask, uintptr_t val)
+{
+	return ((reg & ~mask) | ((val * (mask & ~(mask << 1))) & mask));
+}
+
 static inline unsigned long rdtime() { return read_csr(time); }
 static inline unsigned long rdcycle() { return read_csr(cycle); }
 static inline unsigned long rdinstret() { return read_csr(instret); }
