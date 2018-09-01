@@ -11,6 +11,9 @@ extern "C" {
 #include <stddef.h>
 #include <stdarg.h>
 
+#include "atomic.h"
+#include "encoding.h"
+
 void init();
 int putchar(int);
 int getchar();
@@ -55,18 +58,14 @@ void malloc_addblock(void* addr, size_t size);
 #define clear_csr(reg, bit) ({ unsigned long __tmp; \
   asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); __tmp; })
 
-static inline void mret() {
-  asm volatile ("mret");
-}
-
 static inline uintptr_t get_field(uintptr_t reg, uintptr_t mask)
 {
-	return ((reg & mask) / (mask & ~(mask << 1)));
+    return ((reg & mask) / (mask & ~(mask << 1)));
 }
 
 static inline uintptr_t set_field(uintptr_t reg, uintptr_t mask, uintptr_t val)
 {
-	return ((reg & ~mask) | ((val * (mask & ~(mask << 1))) & mask));
+    return ((reg & ~mask) | ((val * (mask & ~(mask << 1))) & mask));
 }
 
 static inline unsigned long rdtime() { return read_csr(time); }
@@ -76,6 +75,45 @@ static inline int64_t misa() { return read_const_csr(misa); }
 static inline int has_ext(char ext) { return misa() & (1 << (ext - 'a')); }
 static inline int xlen() { return misa() < 0 ? 64 : 32; }
 static inline void wfi() { asm volatile ("wfi" ::: "memory"); }
+
+__attribute__((noreturn)) static inline void mret()
+{
+    asm volatile ("mret");
+    __builtin_unreachable();
+}
+
+/*
+ * set_mode_and_jump
+ *
+ * Set mstatus.mpp, sets mepc to passed function pointer and then issues mret
+ * Note: the hart will continue running on the same stack
+ */
+static inline void set_mode_and_jump(unsigned mode, void (*fn)(void))
+{
+    assert(mode <= PRV_U);
+    write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));
+    write_csr(mepc, fn);
+    mret();
+}
+
+/*
+ * set_mode_and_continue
+ *
+ * Set mstatus.mpp, sets mepc to instruction after mret and then issues mret
+ * Note: the hart will continue running on the same stack
+ */
+static inline void set_mode_and_continue(unsigned mode)
+{
+    assert(mode <= PRV_U);
+    write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));
+    asm volatile (
+        "lla t0, 1f\n"
+        "csrw mepc, t0\n"
+        "mret\n"
+        "1:"
+        ::: "t0"
+    );
+}
 
 typedef void (*trap_fn)(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc);
 void register_trap_fn(trap_fn fn);
