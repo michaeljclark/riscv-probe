@@ -201,7 +201,27 @@ enum {
 	csr_scause,
 	csr_stval,
 	csr_sip,
-	csr_satp
+	csr_satp,
+	csr_pmpcfg0,
+	csr_pmpcfg1,
+	csr_pmpcfg2,
+	csr_pmpcfg3,
+	csr_pmpaddr0,
+	csr_pmpaddr1,
+	csr_pmpaddr2,
+	csr_pmpaddr3,
+	csr_pmpaddr4,
+	csr_pmpaddr5,
+	csr_pmpaddr6,
+	csr_pmpaddr7,
+	csr_pmpaddr8,
+	csr_pmpaddr9,
+	csr_pmpaddr10,
+	csr_pmpaddr11,
+	csr_pmpaddr12,
+	csr_pmpaddr13,
+	csr_pmpaddr14,
+	csr_pmpaddr15
 };
 
 #ifdef __cplusplus

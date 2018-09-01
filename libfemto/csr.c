@@ -42,6 +42,26 @@ static int all_csr_enums[] = {
 	csr_stval,
 	csr_sip,
 	csr_satp,
+	csr_pmpcfg0,
+	csr_pmpcfg1,
+	csr_pmpcfg2,
+	csr_pmpcfg3,
+	csr_pmpaddr0,
+	csr_pmpaddr1,
+	csr_pmpaddr2,
+	csr_pmpaddr3,
+	csr_pmpaddr4,
+	csr_pmpaddr5,
+	csr_pmpaddr6,
+	csr_pmpaddr7,
+	csr_pmpaddr8,
+	csr_pmpaddr9,
+	csr_pmpaddr10,
+	csr_pmpaddr11,
+	csr_pmpaddr12,
+	csr_pmpaddr13,
+	csr_pmpaddr14,
+	csr_pmpaddr15,
 	csr_none,
 };
 
@@ -88,6 +108,26 @@ static const char* all_csr_names[] = {
 	"stval",
 	"sip",
 	"satp",
+	"pmpcfg0",
+	"pmpcfg1",
+	"pmpcfg2",
+	"pmpcfg3",
+	"pmpaddr0",
+	"pmpaddr1",
+	"pmpaddr2",
+	"pmpaddr3",
+	"pmpaddr4",
+	"pmpaddr5",
+	"pmpaddr6",
+	"pmpaddr7",
+	"pmpaddr8",
+	"pmpaddr9",
+	"pmpaddr10",
+	"pmpaddr11",
+	"pmpaddr12",
+	"pmpaddr13",
+	"pmpaddr14",
+	"pmpaddr15"
 };
 
 int* csr_enum_array()
@@ -145,6 +185,26 @@ long read_csr_enum(int csrenum)
 		case csr_stval:      result = read_csr(0x143); break;
 		case csr_sip:        result = read_csr(0x144); break;
 		case csr_satp:       result = read_csr(0x180); break;
+		case csr_pmpcfg0:    result = read_csr(0x3A0); break;
+		case csr_pmpcfg1:    result = read_csr(0x3A1); break;
+		case csr_pmpcfg2:    result = read_csr(0x3A2); break;
+		case csr_pmpcfg3:    result = read_csr(0x3A3); break;
+		case csr_pmpaddr0:   result = read_csr(0x3B0); break;
+		case csr_pmpaddr1:   result = read_csr(0x3B1); break;
+		case csr_pmpaddr2:   result = read_csr(0x3B2); break;
+		case csr_pmpaddr3:   result = read_csr(0x3B3); break;
+		case csr_pmpaddr4:   result = read_csr(0x3B4); break;
+		case csr_pmpaddr5:   result = read_csr(0x3B5); break;
+		case csr_pmpaddr6:   result = read_csr(0x3B6); break;
+		case csr_pmpaddr7:   result = read_csr(0x3B7); break;
+		case csr_pmpaddr8:   result = read_csr(0x3B8); break;
+		case csr_pmpaddr9:   result = read_csr(0x3B9); break;
+		case csr_pmpaddr10:  result = read_csr(0x3BA); break;
+		case csr_pmpaddr11:  result = read_csr(0x3BB); break;
+		case csr_pmpaddr12:  result = read_csr(0x3BC); break;
+		case csr_pmpaddr13:  result = read_csr(0x3BD); break;
+		case csr_pmpaddr14:  result = read_csr(0x3BE); break;
+		case csr_pmpaddr15:  result = read_csr(0x3BF); break;
 		default: break;
 	}
 	return result;
@@ -194,6 +254,26 @@ void write_csr_enum(int csrenum, long value)
 		case csr_stval:      write_csr(0x143, value); break;
 		case csr_sip:        write_csr(0x144, value); break;
 		case csr_satp:       write_csr(0x180, value); break;
+		case csr_pmpcfg0:    write_csr(0x3A0, value); break;
+		case csr_pmpcfg1:    write_csr(0x3A1, value); break;
+		case csr_pmpcfg2:    write_csr(0x3A2, value); break;
+		case csr_pmpcfg3:    write_csr(0x3A3, value); break;
+		case csr_pmpaddr0:   write_csr(0x3B0, value); break;
+		case csr_pmpaddr1:   write_csr(0x3B1, value); break;
+		case csr_pmpaddr2:   write_csr(0x3B2, value); break;
+		case csr_pmpaddr3:   write_csr(0x3B3, value); break;
+		case csr_pmpaddr4:   write_csr(0x3B4, value); break;
+		case csr_pmpaddr5:   write_csr(0x3B5, value); break;
+		case csr_pmpaddr6:   write_csr(0x3B6, value); break;
+		case csr_pmpaddr7:   write_csr(0x3B7, value); break;
+		case csr_pmpaddr8:   write_csr(0x3B8, value); break;
+		case csr_pmpaddr9:   write_csr(0x3B9, value); break;
+		case csr_pmpaddr10:  write_csr(0x3BA, value); break;
+		case csr_pmpaddr11:  write_csr(0x3BB, value); break;
+		case csr_pmpaddr12:  write_csr(0x3BC, value); break;
+		case csr_pmpaddr13:  write_csr(0x3BD, value); break;
+		case csr_pmpaddr14:  write_csr(0x3BE, value); break;
+		case csr_pmpaddr15:  write_csr(0x3BF, value); break;
 		default: break;
 	}
 }
