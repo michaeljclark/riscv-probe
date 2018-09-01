@@ -67,44 +67,20 @@ build/lib/rv32/libfemto.a: $(LIBFEMTO_RV32_OBJ)
 build/lib/rv64/libfemto.a: $(LIBFEMTO_RV64_OBJ)
 	$(call cmd,AR.rv64 $@,$(@D),$(AR) cr $@ $^)
 
-#
-# libuart build rules
-#
-
-build/lib/rv32/libuart_spike_htif.a: build/obj/rv32/libuart/uart_spike_htif.o
-	$(call cmd,AR.rv32 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv64/libuart_spike_htif.a: build/obj/rv64/libuart/uart_spike_htif.o
-	$(call cmd,AR.rv64 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv32/libuart_qemu_sifive.a: build/obj/rv32/libuart/uart_qemu_sifive.o
-	$(call cmd,AR.rv32 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv64/libuart_qemu_sifive.a: build/obj/rv64/libuart/uart_qemu_sifive.o
-	$(call cmd,AR.rv64 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv32/libuart_virt_16550.a: build/obj/rv32/libuart/uart_virt_16550.o
-	$(call cmd,AR.rv32 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv64/libuart_virt_16550.a: build/obj/rv64/libuart/uart_virt_16550.o
-	$(call cmd,AR.rv64 $@,$(@D),$(AR) cr $@ $^)
-
-build/lib/rv32/libuart_coreip_e2_arty.a: build/obj/rv32/libuart/uart_coreip_e2_arty.o
-	$(call cmd,AR.rv32 $@,$(@D),$(AR) cr $@ $^)
 
 #
 # Target environment definitions
 #
 
-configs = rv32:spike:libuart_spike_htif.a \
-          rv64:spike:libuart_spike_htif.a \
-          rv32:virt:libuart_virt_16550.a \
-          rv64:virt:libuart_virt_16550.a \
-          rv32:qemu-sifive_e:libuart_qemu_sifive.a \
-          rv64:qemu-sifive_e:libuart_qemu_sifive.a \
-          rv32:qemu-sifive_u:libuart_qemu_sifive.a \
-          rv64:qemu-sifive_u:libuart_qemu_sifive.a \
-          rv32:coreip-e2-arty::libuart_coreip_e2_arty.a
+configs = rv32:spike:libuart/uart_spike_htif.o \
+          rv64:spike:libuart/uart_spike_htif.o \
+          rv32:virt:libuart/uart_virt_16550.o \
+          rv64:virt:libuart/uart_virt_16550.o \
+          rv32:qemu-sifive_e:libuart/uart_qemu_sifive.o \
+          rv64:qemu-sifive_e:libuart/uart_qemu_sifive.o \
+          rv32:qemu-sifive_u:libuart/uart_qemu_sifive.o \
+          rv64:qemu-sifive_u:libuart/uart_qemu_sifive.o \
+          rv32:coreip-e2-arty::libuart/uart_coreip_e2_arty.o
 
 #
 # Build system functions to generate build rules for examples
@@ -121,7 +97,7 @@ config_env = $(word 2,$(subst :, ,$(1)))
 config_lib = $(word 3,$(subst :, ,$(1)))
 
 define rule =
-build/bin/$(3)/$(4)/$(1): $(2) build/lib/$(3)/libfemto.a build/lib/$(3)/$(5)
+build/bin/$(3)/$(4)/$(1): $(2) build/lib/$(3)/libfemto.a build/obj/$(3)/$(5)
 	$$(call cmd,LD.$(3) $$@,$$(@D),$(CC_$(3)) $$(LDFLAGS) \
 	-T env/$(4)/default.lds $$^ -o $$@)
 endef
