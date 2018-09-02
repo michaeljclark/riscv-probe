@@ -112,10 +112,19 @@ do_reset:
     li      t5, 0
     li      t6, 0
 
+    # park all harts excpet hart 0
+    csrr    a0, mhartid
+    bnez    a0, park
+
     # run init code, followed by main, then poweroff
     jal     init
     jal     main
     j       poweroff
+
+    # sleeping harts mtvec calls trap_fn upon receiving IPI
+park:
+    wfi
+    j       park
 
     .bss
     .align 4
