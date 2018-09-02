@@ -72,15 +72,15 @@ build/lib/rv64/libfemto.a: $(LIBFEMTO_RV64_OBJ)
 # Target environment definitions
 #
 
-configs = rv32:spike:libuart/uart_spike_htif.o \
-          rv64:spike:libuart/uart_spike_htif.o \
-          rv32:virt:libuart/uart_virt_16550.o \
-          rv64:virt:libuart/uart_virt_16550.o \
-          rv32:qemu-sifive_e:libuart/uart_qemu_sifive.o \
-          rv64:qemu-sifive_e:libuart/uart_qemu_sifive.o \
-          rv32:qemu-sifive_u:libuart/uart_qemu_sifive.o \
-          rv64:qemu-sifive_u:libuart/uart_qemu_sifive.o \
-          rv32:coreip-e2-arty::libuart/uart_coreip_e2_arty.o
+configs = rv32:spike:libio/io_spike_htif.o \
+          rv64:spike:libio/io_spike_htif.o \
+          rv32:virt:libio/io_virt_16550.o \
+          rv64:virt:libio/io_virt_16550.o \
+          rv32:qemu-sifive_e:libio/io_qemu_sifive.o \
+          rv64:qemu-sifive_e:libio/io_qemu_sifive.o \
+          rv32:qemu-sifive_u:libio/io_qemu_sifive.o \
+          rv64:qemu-sifive_u:libio/io_qemu_sifive.o \
+          rv32:coreip-e2-arty::libio/io_coreip_e2_arty.o
 
 #
 # Build system functions to generate build rules for examples
