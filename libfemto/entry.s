@@ -66,18 +66,22 @@ trap_vector:
     mret
 
 do_reset:
-    # libfemto bare-metal code expects mret to return to M-mode
+    # libfemto code expects mret to return to M-mode by default
     li      t0, MSTATUS_MPP
     csrs    mstatus, t0
+
+    # setup default trap vector; note: programs can override entry.s
     la      t0, trap_vector
     csrw    mtvec, t0
+
+    # set up stack pointer based on hartid
     csrr    t0, mhartid
+    slli    t0, t0, STACK_SHIFT
     la      sp, stacks + STACK_SIZE
-    beqz    t0, 2f
-1:  addi    sp, sp, STACK_SIZE
-    addi    t0, t0, -1
-    bnez    t0, 1b
-2:  li      ra, 0
+    add     sp, sp, t0
+
+    # clear registers
+    li      ra, 0
     li      gp, 0
     li      tp, 0
     li      t0, 0
@@ -107,6 +111,8 @@ do_reset:
     li      t4, 0
     li      t5, 0
     li      t6, 0
+
+    # run init code, followed by main, then poweroff
     jal     init
     jal     main
     j       poweroff
