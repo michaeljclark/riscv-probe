@@ -5,7 +5,7 @@ Simple machine mode program to probe RISC-V control and status registers.
 riscv-probe currently works with:
 [Spike](https://github.com/riscv/riscv-isa-sim),
 [QEMU](https://github.com/riscv/riscv-qemu) and the
-[SiFive E21](https://www.sifive.com/products/risc-v-core-ip/e2/e21/).
+[SiFive E21](https://www.sifive.com/products/risc-v-core-ip/e2/e21/) core.
 It can be used to compare control and status registers.
 riscv-probe contains libfemto which is a lightweight bare-metal C library that can
 be used as a starting point for bare metal RISC-V programs that need printf,
