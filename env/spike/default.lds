@@ -34,13 +34,13 @@ SECTIONS
     PROVIDE(_data_end = .);
   } >ram AT>ram :data
 
-  .htif   : {
-    . = ALIGN(1024); *(.htif)
-  } >ram AT>ram :data
-
   .bss :{
     PROVIDE(_bss_start = .);
     *(.sbss .sbss.*) *(.bss .bss.*)
     PROVIDE(_bss_end = .);
   } >ram AT>ram :bss
+
+  .htif   : {
+    . = ALIGN(8); *(.htif)
+  } >ram AT>ram :data
 }
