@@ -23,8 +23,8 @@ make
 
 To invoke the probe example in spike and RISC-V QEMU:
 
-- `$ spike --isa=RV32IMAFDC build/bin/rv32/probe-htif`
-- `$ spike --isa=RV64IMAFDC build/bin/rv64/probe-htif`
+- `$ spike --isa=RV32IMAFDC build/bin/rv32/spike/probe`
+- `$ spike --isa=RV64IMAFDC build/bin/rv64/spike/probe`
 - `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/spike/probe`
 - `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/spike/probe`
 - `$ qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32/virt/probe`
