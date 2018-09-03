@@ -10,10 +10,10 @@ AR                 = $(RISCV_PREFIX)ar
 CFLAGS             = -mcmodel=medany -Os -ffunction-sections
 LDFLAGS            = -nostartfiles -nostdlib -static \
                      -Wl,--nmagic -Wl,--gc-sections
-INCLUDES           = -Ienv/common -Ilibfemto
+INCLUDES           = -Ienv/common -Ilibfemto/include
 
-LIBFEMTO_SRCS      = $(sort $(wildcard libfemto/*.c))
-LIBFEMTO_ASM       = $(sort $(wildcard libfemto/*.s))
+LIBFEMTO_SRCS      = $(sort $(foreach d,std arch,$(wildcard libfemto/$(d)/*.c)))
+LIBFEMTO_ASM       = $(sort $(foreach d,std arch,$(wildcard libfemto/$(d)/*.s)))
 LIBFEMTO_OBJS      = $(patsubst %.s,%.o,$(LIBFEMTO_ASM)) \
                      $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
 LIBFEMTO_RV32_OBJ  = $(addprefix build/obj/rv32/,$(LIBFEMTO_OBJS))

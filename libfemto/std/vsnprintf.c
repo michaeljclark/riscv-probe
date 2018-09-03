@@ -4,8 +4,8 @@
 
 int vsnprintf(char * out, size_t n, const char* s, va_list vl)
 {
-  bool format = false;
-  bool longarg = false;
+  int format = 0;
+  int longarg = 0;
   size_t pos = 0;
   for( ; *s; s++)
   {
@@ -14,10 +14,10 @@ int vsnprintf(char * out, size_t n, const char* s, va_list vl)
       switch(*s)
       {
         case 'l':
-          longarg = true;
+          longarg = 1;
           break;
         case 'p':
-          longarg = true;
+          longarg = 1;
           if (++pos < n) out[pos-1] = '0';
           if (++pos < n) out[pos-1] = 'x';
         case 'x':
@@ -27,8 +27,8 @@ int vsnprintf(char * out, size_t n, const char* s, va_list vl)
             int d = (num >> (4*i)) & 0xF;
             if (++pos < n) out[pos-1] = (d < 10 ? '0'+d : 'a'+d-10);
           }
-          longarg = false;
-          format = false;
+          longarg = 0;
+          format = 0;
           break;
         }
         case 'd':
@@ -46,8 +46,8 @@ int vsnprintf(char * out, size_t n, const char* s, va_list vl)
             num /= 10;
           }
           pos += digits;
-          longarg = false;
-          format = false;
+          longarg = 0;
+          format = 0;
           break;
         }
         case 's':
@@ -58,15 +58,15 @@ int vsnprintf(char * out, size_t n, const char* s, va_list vl)
               out[pos-1] = *s2;
             s2++;
           }
-          longarg = false;
-          format = false;
+          longarg = 0;
+          format = 0;
           break;
         }
         case 'c':
         {
           if (++pos < n) out[pos-1] = (char)va_arg(vl,int);
-          longarg = false;
-          format = false;
+          longarg = 0;
+          format = 0;
           break;
         }
         default:
@@ -74,7 +74,7 @@ int vsnprintf(char * out, size_t n, const char* s, va_list vl)
       }
     }
     else if(*s == '%')
-      format = true;
+      format = 1;
     else
       if (++pos < n) out[pos-1] = *s;
   }

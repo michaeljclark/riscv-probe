@@ -1,3 +1,5 @@
+// See LICENSE for license details.
+
 #include "femto.h"
 
 static trap_fn tfn = 0;
