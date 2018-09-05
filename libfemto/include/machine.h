@@ -52,6 +52,28 @@ __attribute__((noreturn)) static inline void mret()
 }
 
 /*
+ * - PMP is optional
+ * - PMP enforcement is mandatory by default if PMP is implemented
+ *   meaning loads, stores or instruction fetches from modes higher
+ *   than M mode will fail unless explicitly allowed. This means
+ *   PMP must be configured irregardless of whether it is implemented.
+ * - PMP can be unimplemented, wired to zero, or may trap
+ */
+static inline void pmp_allow_all()
+{
+  /* borrowed from bbl. set up a PMP to permit access to all of memory.
+   * Ignore the illegal-instruction trap if PMPs aren't supported. */
+  uintptr_t pmpc = PMP_NAPOT | PMP_R | PMP_W | PMP_X;
+  asm volatile ("la t0, 1f\n\t"
+                "csrrw t0, mtvec, t0\n\t"
+                "csrw pmpaddr0, %1\n\t"
+                "csrw pmpcfg0, %0\n\t"
+                ".align 2\n\t"
+                "1: csrw mtvec, t0"
+                : : "r" (pmpc), "r" (-1UL) : "t0");
+}
+
+/*
  * set_mode_and_jump
  *
  * Set mstatus.mpp, sets mepc to passed function pointer and then issues mret
