@@ -71,6 +71,11 @@ static inline void pmp_allow_all()
                 ".align 2\n\t"
                 "1: csrw mtvec, t0"
                 : : "r" (pmpc), "r" (-1UL) : "t0");
+            /*                        ^ Reserved
+             * Section 3.6.1 Physical Memory Protection CSRs
+             * Table 3.9: NAPOT range encoding in PMP address and
+             * configuration registers: 1111...1111 NAPOT Reserved
+             */
 }
 
 /*
