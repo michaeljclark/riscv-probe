@@ -11,12 +11,15 @@ static spinlock_t htif_lock = SPINLOCK_INIT;
 
 static inline void htif_send(uint8_t dev, uint8_t cmd, int64_t data)
 {
-    tohost = (uint64_t)dev << 56 | (uint64_t)cmd << 48 | data;
+    ((volatile uint32_t *)&tohost)[0] = data;
+    ((volatile uint32_t *)&tohost)[1] = dev << 24 | cmd << 16 | data >> 32;
 }
 
 static inline void htif_recv(uint8_t *dev, uint8_t *cmd, int64_t *data)
 {
-    uint64_t val = fromhost;
+    uint32_t lo = ((volatile uint32_t *)&fromhost)[0];
+    uint64_t hi = ((volatile uint32_t *)&fromhost)[1];
+    uint64_t val = hi << 32 | lo;
     *dev = val >> 56;
     *cmd = (val >> 48) & 0xff;
     *data = val << 16 >> 16;
