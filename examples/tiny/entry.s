@@ -12,7 +12,7 @@
 
 _start:
     la      sp, stacks + STACK_SIZE
-    jal     init
+    jal     setup
     jal     main
     j       poweroff
 

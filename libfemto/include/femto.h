@@ -10,7 +10,7 @@ extern "C" {
 #include <stddef.h>
 #include <stdarg.h>
 
-#include "io.h"
+#include "drivers.h"
 #include "libc.h"
 #include "malloc.h"
 #include "atomic.h"

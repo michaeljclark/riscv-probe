@@ -117,7 +117,7 @@ do_reset:
     bnez    a0, park
 
     # run init code, followed by main, then poweroff
-    jal     init
+    jal     setup
     jal     main
     j       poweroff
 

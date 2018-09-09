@@ -1,7 +1,6 @@
 // See LICENSE for license details.
 
 #include "atomic.h"
-#include "encoding.h"
 #include "femto.h"
 
 volatile uint64_t tohost __attribute__((section(".htif")));
@@ -41,7 +40,7 @@ static void htif_set_tohost(uint8_t dev, uint8_t cmd, int64_t data)
     htif_send(dev, cmd, data);
 }
 
-int getchar()
+static int htif_getchar()
 {
     int ch;
     spinlock_lock(&htif_lock);
@@ -52,7 +51,7 @@ int getchar()
     return ch;
 }
 
-int putchar(int ch)
+static int htif_putchar(int ch)
 {
     spinlock_lock(&htif_lock);
     htif_set_tohost(1, 1, ch & 0xff);
@@ -60,11 +59,21 @@ int putchar(int ch)
     return ch & 0xff;
 }
 
-void poweroff()
+static __attribute__((noreturn)) void htif_poweroff()
 {
     for (;;) {
         htif_set_tohost(0, 0, 1);
     }
 }
 
-void init() {}
+console_device_t console_htif = {
+    NULL,
+    htif_getchar,
+    htif_putchar
+};
+
+
+poweroff_device_t poweroff_htif = {
+	NULL,
+	htif_poweroff
+};
