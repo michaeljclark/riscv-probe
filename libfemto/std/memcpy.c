@@ -4,7 +4,7 @@
 
 void *memcpy(void *dest, const void *src, size_t n)
 {
-	char *p = dest;
+    char *p = dest;
     while (n-- > 0) {
         *(char*)dest++ = *(char*)src++;
     }

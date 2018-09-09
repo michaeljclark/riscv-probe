@@ -4,6 +4,6 @@
 
 int puts(const char *s)
 {
-  while (*s) putchar(*s++);
-  putchar('\n');
+    while (*s) putchar(*s++);
+    putchar('\n');
 }

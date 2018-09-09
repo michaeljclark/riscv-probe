@@ -20,13 +20,13 @@ void register_poweroff(config_data_t *cfg, poweroff_device_t *dev)
 
 uintptr_t get_config_data(config_data_t *cfg, uintptr_t key)
 {
-	while(cfg->key) {
-		if (cfg->key == key) {
-			return cfg->val;
-		}
-		cfg++;
-	}
-	return 0;
+    while(cfg->key) {
+        if (cfg->key == key) {
+            return cfg->val;
+        }
+        cfg++;
+    }
+    return 0;
 }
 
 int getchar()
@@ -47,20 +47,20 @@ void poweroff()
 static int default_getchar()
 {
     asm volatile("ebreak");
-   	return 0;
+    return 0;
 }
 
 static int default_putchar(int ch)
 {
     asm volatile("ebreak");
-   	return 0;
+    return 0;
 }
 
 static __attribute__((noreturn)) void default_poweroff()
 {
     asm volatile("ebreak");
     while (1) {
-    	asm volatile("" : : : "memory");
+        asm volatile("" : : : "memory");
     }
 }
 

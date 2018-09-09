@@ -4,7 +4,7 @@
 
 void *memset(void *dest, int c, size_t n)
 {
-	char *p = dest;
+    char *p = dest;
     while (n-- > 0) {
         *(char*)dest++ = c;
     }

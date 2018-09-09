@@ -44,14 +44,14 @@ const char * riscv_intr_names[16] = {
 
 void register_trap_fn(trap_fn fn)
 {
-	tfn = fn;
+    tfn = fn;
 }
 
 void trap_handler(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
-	if (tfn) {
-		tfn(regs, mcause, mepc);
-	} else {
-	  	die("machine mode: unhandlable trap %d @ %p", mcause, mepc);
-	}
+    if (tfn) {
+        tfn(regs, mcause, mepc);
+    } else {
+        die("machine mode: unhandlable trap %d @ %p", mcause, mepc);
+    }
 }
