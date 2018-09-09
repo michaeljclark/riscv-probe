@@ -20,6 +20,22 @@ LIBFEMTO_RV32_OBJ  = $(addprefix build/obj/rv32/,$(LIBFEMTO_OBJS))
 LIBFEMTO_RV64_OBJ  = $(addprefix build/obj/rv64/,$(LIBFEMTO_OBJS))
 
 #
+# Target environment definitions
+#
+
+configs = rv32:default \
+          rv64:default \
+          rv32:spike \
+          rv64:spike \
+          rv32:virt \
+          rv64:virt \
+          rv32:qemu-sifive_e \
+          rv64:qemu-sifive_e \
+          rv32:qemu-sifive_u \
+          rv64:qemu-sifive_u \
+          rv32:coreip-e2-arty
+
+#
 # make rules
 #
 
@@ -69,23 +85,7 @@ build/lib/rv64/libfemto.a: $(LIBFEMTO_RV64_OBJ)
 
 
 #
-# Target environment definitions
-#
-
-configs = rv32:default \
-          rv64:default \
-          rv32:spike \
-          rv64:spike \
-          rv32:virt \
-          rv64:virt \
-          rv32:qemu-sifive_e \
-          rv64:qemu-sifive_e \
-          rv32:qemu-sifive_u \
-          rv64:qemu-sifive_u \
-          rv32:coreip-e2-arty
-
-#
-# Build system functions to generate build rules for examples
+# Build system functions to generate build rules for all configs
 #
 
 build_dirs = examples
