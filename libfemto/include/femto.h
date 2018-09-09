@@ -12,7 +12,7 @@ extern "C" {
 #include <stdarg.h>
 #include <string.h>
 
-#include "drivers.h"
+#include "device.h"
 #include "malloc.h"
 #include "atomic.h"
 #include "encoding.h"
