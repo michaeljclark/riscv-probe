@@ -11,6 +11,10 @@ static config_data_t coreip_e2_arty[] = {
 
 void setup()
 {
-	/* note: clock setup code can modify uart clock speed */
+    /*
+     * clock setup code should be placed here and should modify the
+     * uart clock speed before calling register_console, which calls
+     * uart_init and reads the uart clock speed from the config array.
+     */
     register_console(coreip_e2_arty, &console_sifive_uart);
 }
