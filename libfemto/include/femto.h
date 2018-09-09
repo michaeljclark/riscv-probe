@@ -10,10 +10,10 @@ extern "C" {
 #include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "device.h"
-#include "malloc.h"
 #include "atomic.h"
 #include "encoding.h"
 #include "machine.h"

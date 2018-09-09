@@ -6,7 +6,6 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stddef.h>
 
 void* malloc(size_t size);
