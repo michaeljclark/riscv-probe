@@ -1,6 +1,5 @@
 // See LICENSE for license details.
 
-#include "atomic.h"
 #include "femto.h"
 
 auxval_t __auxv[] = {
