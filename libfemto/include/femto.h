@@ -13,6 +13,7 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 
+#include "auxval.h"
 #include "device.h"
 #include "atomic.h"
 #include "encoding.h"

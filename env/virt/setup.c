@@ -2,7 +2,7 @@
 
 #include "femto.h"
 
-static config_data_t virt[] = {
+auxval_t __auxv[] = {
     { UART0_CLOCK_FREQ,         1843200    },
     { UART0_BAUD_RATE,          115200     },
     { NS16550A_UART0_CTRL_ADDR, 0x10000000 },
@@ -12,6 +12,6 @@ static config_data_t virt[] = {
 
 void setup()
 {
-    register_console(virt, &console_ns16550a);
-    register_poweroff(virt, &poweroff_sifive_test);
+    register_console(&console_ns16550a);
+    register_poweroff(&poweroff_sifive_test);
 }

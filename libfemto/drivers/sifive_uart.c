@@ -26,11 +26,11 @@ enum {
 
 static volatile int *uart;
 
-static void sifive_uart_init(config_data_t *cfg)
+static void sifive_uart_init()
 {
-	uart = (int *)(void *)get_config_data(cfg, SIFIVE_UART0_CTRL_ADDR);
-	uint32_t uart_freq = get_config_data(cfg, UART0_CLOCK_FREQ);
-	uint32_t baud_rate = get_config_data(cfg, UART0_BAUD_RATE);
+	uart = (int *)(void *)getauxval(SIFIVE_UART0_CTRL_ADDR);
+	uint32_t uart_freq = getauxval(UART0_CLOCK_FREQ);
+	uint32_t baud_rate = getauxval(UART0_BAUD_RATE);
     uint32_t divisor = uart_freq / baud_rate - 1;
     uart[UART_REG_DIV] = divisor;
     uart[UART_REG_TXCTRL] = UART_TXEN;

@@ -31,11 +31,11 @@ enum {
 
 static volatile uint8_t *uart;
 
-static void ns16550a_init(config_data_t *cfg)
+static void ns16550a_init()
 {
-	uart = (uint8_t *)(void *)get_config_data(cfg, NS16550A_UART0_CTRL_ADDR);
-	uint32_t uart_freq = get_config_data(cfg, UART0_CLOCK_FREQ);
-	uint32_t baud_rate = get_config_data(cfg, UART0_BAUD_RATE);
+	uart = (uint8_t *)(void *)getauxval(NS16550A_UART0_CTRL_ADDR);
+	uint32_t uart_freq = getauxval(UART0_CLOCK_FREQ);
+	uint32_t baud_rate = getauxval(UART0_BAUD_RATE);
     uint32_t divisor = uart_freq / (16 * baud_rate);
     uart[UART_LCR] = UART_LCR_DLAB;
     uart[UART_DLL] = divisor & 0xff;

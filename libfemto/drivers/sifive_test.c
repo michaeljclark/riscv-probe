@@ -9,9 +9,9 @@ enum {
 
 static volatile uint32_t *test;
 
-static void sifive_test_init(config_data_t *cfg)
+static void sifive_test_init()
 {
-	test = (uint32_t *)(void *)get_config_data(cfg, SIFIVE_TEST_CTRL_ADDR);
+	test = (uint32_t *)(void *)getauxval(SIFIVE_TEST_CTRL_ADDR);
 }
 
 static __attribute__((noreturn)) void sifive_test_poweroff()
