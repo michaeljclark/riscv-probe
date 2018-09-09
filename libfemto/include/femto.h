@@ -6,12 +6,13 @@
 extern "C" {
 #endif
 
+#include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "drivers.h"
-#include "libc.h"
 #include "malloc.h"
 #include "atomic.h"
 #include "encoding.h"

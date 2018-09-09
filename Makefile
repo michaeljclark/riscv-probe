@@ -8,7 +8,7 @@ CC_rv64            = $(RISCV_PREFIX)gcc $(CFLAGS_rv64)
 AR                 = $(RISCV_PREFIX)ar
 
 CFLAGS             = -mcmodel=medany -Os -ffunction-sections -fdata-sections
-LDFLAGS            = -nostartfiles -nostdlib -static \
+LDFLAGS            = -nostartfiles -nostdlib -nostdinc -static \
                      -Wl,--nmagic -Wl,--gc-sections
 INCLUDES           = -Ienv/common -Ilibfemto/include
 

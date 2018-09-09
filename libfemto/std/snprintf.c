@@ -1,6 +1,6 @@
 // See LICENSE for license details.
 
-#include "femto.h"
+#include <stdio.h>
 
 int snprintf(char* out, size_t n, const char* s, ...)
 {

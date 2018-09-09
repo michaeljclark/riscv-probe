@@ -1,4 +1,4 @@
-#include "femto.h"
+#include <stdio.h>
 
 /* program to print linker script provided symbols */
 

@@ -1,6 +1,6 @@
 // See LICENSE for license details.
 
-#include "femto.h"
+#include <stdio.h>
 
 int puts(const char *s)
 {
