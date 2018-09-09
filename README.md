@@ -2,14 +2,18 @@
 
 Simple machine mode program to probe RISC-V control and status registers.
 
-riscv-probe currently works with:
+riscv-probe currently builds for
 [Spike](https://github.com/riscv/riscv-isa-sim),
 [QEMU](https://github.com/riscv/riscv-qemu) and the
 [SiFive E21](https://www.sifive.com/products/risc-v-core-ip/e2/e21/) core.
-It can be used to compare control and status registers.
-riscv-probe contains libfemto which is a lightweight bare-metal C library that can
-be used as a starting point for bare metal RISC-V programs that need printf,
-interrupt handling, basic string routines, getchar and putchar.
+riscv-probe is a testing tool designed be used to compare CSRs (Control and
+Status Registers) between mutliple RISC-V simulators and RISC-V hardware
+implementations.
+
+riscv-probe contains libfemto which is a lightweight bare-metal C library
+conforming to a reduced set ot the _POSIX.1-2017 / IEEE 1003.1-2017_ standard.
+libfemto can be used as a starting point for bare metal RISC-V programs that
+require interrupt handling, basic string routines and printf.
 
 ## Build
 
@@ -34,8 +38,138 @@ To invoke the probe example in spike and RISC-V QEMU:
 - `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32/qemu-sifive_u/probe`
 - `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64/qemu-sifive_u/probe`
 
+## libfemto
 
-### riscv-probe in qemu-system-riscv32
+libfemto is a lightweight bare-metal C library for embedded RISC-V development.
+libfemto provides:
+
+- Reduced set of the _POSIX.1-2017 / IEEE 1003.1-2017_ standard
+- RISC-V machine mode functions and macros
+- Console and power device drivers
+
+libfemto implements a reduced set of the _POSIX.1-2017 / IEEE 1003.1-2017_
+standard, with the addition of glibc's `getauxval` API to access configuration
+in an `__auxv` array containing tuples describing the target environment.
+
+libfemto contains the following device drivers:
+
+- HTIF (Host Target Interface)
+- NS16550A UART Console
+- SiFive UART Console
+- SiFive Test Device
+- Semihosting Syscalls
+
+### Environments
+
+This project contains a simple build system that allows building applications
+targetting multiple embedded environments.
+
+- _default_ - environment where IO defaults to `ebreak`
+- _spike_- the RISC-V ISA Simulator Golden Model
+- _virt_ - the RISC-V VirtIO Virtual Machine
+- _qemu-sifive_e_ - QEMU Functional Model of the SiFive E Series
+- _qemu-sifive_u_ - QEMU Functional Model of the SiFive U Series
+- _coreip-e2-arty_ - SiFive E2 CoreIP Arty A7 FPGA evaluation image
+
+To create a new environment simply add a directory to `env` with two files:
+
+- `default.lds` - linker script describing the memory layout
+- `config.c` - environment specific configuration
+
+The following is an example configuration from `env/<boardname>/config.c`
+
+```
+auxval_t __auxv[] = {
+    { UART0_CLOCK_FREQ,         32000000   },
+    { UART0_BAUD_RATE,          115200     },
+    { SIFIVE_UART0_CTRL_ADDR,   0x20000000 },
+    { SIFIVE_TEST_CTRL_ADDR,    0x4000     },
+    { 0, 0 }
+};
+
+void setup()
+{
+    /*
+     * clock setup code should be placed here and should modify the
+     * uart clock speed before calling register_console, which calls
+     * uart_init and reads the uart clock speed from the config array.
+     */
+    register_console(&console_sifive_uart);
+    register_poweroff(&poweroff_sifive_test);
+}
+```
+
+## Examples
+
+The build system automatically includes any directory added to `examples`
+which contains a `rules.mk` file.
+
+### hello
+
+The following is the `rules.mk` file from the _hello_ example:
+
+```
+$ cat examples/hello/rules.mk 
+hello_objs = hello.o
+```
+
+and `hello.c`
+
+```
+$ cat examples/hello/hello.c 
+#include <stdio.h>
+
+int main()
+{
+	printf("hello\n");
+}
+```
+
+### tiny
+
+The `_start` symbol in _libfemto_ is a weak symbol so it is also possible
+to override the default entry stub with your own code. The following is from
+the _tiny_ example:
+
+```
+$ cat examples/tiny/rules.mk 
+tiny_objs = entry.o tiny.o
+```
+
+Here is the modified `entry.s`
+
+```
+$ cat examples/tiny/entry.s 
+# See LICENSE for license details.
+
+.include "macros.s"
+.include "constants.s"
+
+#
+# start of trap handler
+#
+
+.section .text.init,"ax",@progbits
+.globl _start
+
+_start:
+    la      sp, stacks + STACK_SIZE
+    jal     setup
+    jal     main
+    j       poweroff
+
+    .bss
+    .align 4
+stacks:
+    .skip STACK_SIZE
+```
+
+### riscv-probe
+
+`riscv-probe` is a utility that probes the Control and Status Register address
+space of a RISC-V emulator, FPGA or board:
+
+#### qemu-system-riscv32
 
 ```
 $ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/spike/probe
@@ -103,7 +237,7 @@ csr: pmpaddr14       0x00000000
 csr: pmpaddr15       0x00000000
 ```
 
-### riscv-probe in qemu-system-riscv64
+#### qemu-system-riscv64
 
 ```
 $ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/spike/probe
