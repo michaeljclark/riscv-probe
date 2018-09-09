@@ -2,6 +2,22 @@
 
 #include "femto.h"
 
+void register_console(config_data_t *cfg, console_device_t *dev)
+{
+    console_dev = dev;
+    if (dev->init) {
+        dev->init(cfg);
+    }
+}
+
+void register_poweroff(config_data_t *cfg, poweroff_device_t *dev)
+{
+    poweroff_dev = dev;
+    if (dev->init) {
+        dev->init(cfg);
+    }
+}
+
 uintptr_t get_config_data(config_data_t *cfg, uintptr_t key)
 {
 	while(cfg->key) {
