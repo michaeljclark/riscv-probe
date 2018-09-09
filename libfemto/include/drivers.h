@@ -43,11 +43,25 @@ int getchar();
 void poweroff(void) __attribute__((noreturn));
 
 uintptr_t get_config_data(config_data_t *cfg, uintptr_t key);
-void register_console(config_data_t *cfg, console_device_t *dev);
-void register_poweroff(config_data_t *cfg, poweroff_device_t *dev);
 
 extern console_device_t *console_dev;
 extern poweroff_device_t *poweroff_dev;
+
+static inline void register_console(config_data_t *cfg, console_device_t *dev)
+{
+	console_dev = dev;
+	if (dev->init) {
+		dev->init(cfg);
+	}
+}
+
+static inline void register_poweroff(config_data_t *cfg, poweroff_device_t *dev)
+{
+	poweroff_dev = dev;
+	if (dev->init) {
+		dev->init(cfg);
+	}
+}
 
 extern console_device_t console_none;
 extern console_device_t console_htif;
