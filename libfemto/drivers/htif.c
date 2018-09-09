@@ -82,6 +82,6 @@ console_device_t console_htif = {
 
 
 poweroff_device_t poweroff_htif = {
-	NULL,
-	htif_poweroff
+    NULL,
+    htif_poweroff
 };
