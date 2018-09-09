@@ -15,9 +15,29 @@ conforming to a reduced set ot the _POSIX.1-2017 / IEEE 1003.1-2017_ standard.
 libfemto can be used as a starting point for bare metal RISC-V programs that
 require interrupt handling, basic string routines and printf.
 
+## Dependencies
+
+A recent version of `riscv-tools` with a multilib build of RISC-V GCC.
+
+- [riscv-tools](https://github.com/riscv/riscv-tools)
+  - [riscv-isa-sim](https://github.com/riscv/riscv-isa-sim)
+  - [riscv-openocd](https://github.com/riscv/riscv-openocd)
+  - [riscv-gnu-toolchain](https://github.com/riscv/riscv-gnu-toolchain)
+- [riscv-qemu](https://github.com/riscv/riscv-qemu)
+
 ## Build
 
-To build the examples:
+The build system uses `RISCV_PREFIX` as the toolchain prefix and expects
+the toolchain to be present in the `PATH` environment variable. The default
+value for `RISCV_PREFIX` is `riscv64-unknown-elf-` however this can be
+overridden e.g. `make RISCV_PREFIX=riscv64-unknown-linux-gnu-`. The build
+system expects a multilib toolchain as it uses the same toolchain to build
+for _riscv32_ and _riscv64_. Make sure to use `--enable-multilib` when
+configuring [riscv-gnu-toolchain](https://github.com/riscv/riscv-gnu-toolchain).
+The examples are all built with `-nostartfiles -nostdlib -nostdinc` so either
+the RISC-V GCC Newlib toolchain or RISC-V GCC Glibc Linux toolchain can be used.
+
+To build the examples after environent setup, type:
 
 ```
 make
@@ -51,11 +71,13 @@ libfemto provides:
 libfemto implements a reduced set of the _POSIX.1-2017 / IEEE 1003.1-2017_
 standard, with the addition of glibc's `getauxval` API to access hardware
 configuration in an auxiliary vector (`__auxv`) that contains tuples describing
-the target environment. This is intended as a lightweight mechanism to pass
-dynamic configuration information for embedded targets, as an alternative to
-hardcoding constants used during hardware initialization. The auxiliary vector
-is repurposed to contain hardware configuration parameters such as clock
-frequencies and device base addresses.
+the target environment. The auxiliary vector is intended as a lightweight
+mechanism to pass dynamic configuration information on embedded targets,
+serving as an alternative to compile time constants used during hardware
+initialization. The auxiliary vector API has been repurposed to allow retrieval
+of hardware configuration parameters such as clock frequencies and device base
+addresses for use as a compact alternative to (DTB) Device Tree Binary, which
+is not available on small embedded targets.
 
 libfemto contains the following device drivers:
 
@@ -177,7 +199,26 @@ stacks:
     .skip STACK_SIZE
 ```
 
-### riscv-probe
+### symbols
+
+libfemto linker scripts define the following special symbols:
+
+Symbol           | Value
+------           | -----
+`_text_start`    | start of `.text` section
+`_text_end`      | end of `.text` section
+`_rodata_start`  | start of `.rodata` section
+`_rodata_end`    | end of `.rodata` section
+`_data_start`    | start of `.data` section
+`_data_end`      | end of `.data` section
+`_bss_start`     | start of `.bss` section
+`_bss_end`       | end of `.bss` section
+
+The symbols example program shows how to access these special symbols. They
+can be used for example to locate data section in a flat image in ROM to copy
+into memory and to zero the bss section.
+
+### probe
 
 `riscv-probe` is a utility that probes the Control and Status Register address
 space of a RISC-V emulator, FPGA or board:
