@@ -38,7 +38,7 @@ To invoke the probe example in spike and RISC-V QEMU:
 ### riscv-probe in qemu-system-riscv32
 
 ```
-$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/probe-spike
+$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32/spike/probe
 isa: rv32imafdcsu
 csr: fflags          illegal_instruction cause=0x00000002 mtval=0x00000000
 csr: frm             illegal_instruction cause=0x00000002 mtval=0x00000000
@@ -81,12 +81,32 @@ csr: scause          0x00000000
 csr: stval           0x00000000
 csr: sip             0x00000000
 csr: satp            0x00000000
+csr: pmpcfg0         0x00000000
+csr: pmpcfg1         0x00000000
+csr: pmpcfg2         0x00000000
+csr: pmpcfg3         0x00000000
+csr: pmpaddr0        0x00000000
+csr: pmpaddr1        0x00000000
+csr: pmpaddr2        0x00000000
+csr: pmpaddr3        0x00000000
+csr: pmpaddr4        0x00000000
+csr: pmpaddr5        0x00000000
+csr: pmpaddr6        0x00000000
+csr: pmpaddr7        0x00000000
+csr: pmpaddr8        0x00000000
+csr: pmpaddr9        0x00000000
+csr: pmpaddr10       0x00000000
+csr: pmpaddr11       0x00000000
+csr: pmpaddr12       0x00000000
+csr: pmpaddr13       0x00000000
+csr: pmpaddr14       0x00000000
+csr: pmpaddr15       0x00000000
 ```
 
 ### riscv-probe in qemu-system-riscv64
 
 ```
-$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/probe-spike
+$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64/spike/probe
 isa: rv64imafdcsu
 csr: fflags          illegal_instruction cause=0x00000002 mtval=0x00000000
 csr: frm             illegal_instruction cause=0x00000002 mtval=0x00000000
@@ -129,4 +149,24 @@ csr: scause          0x0000000000000000
 csr: stval           0x0000000000000000
 csr: sip             0x0000000000000000
 csr: satp            0x0000000000000000
+csr: pmpcfg0         0x0000000000000000
+csr: pmpcfg1         0x0000000000000000
+csr: pmpcfg2         0x0000000000000000
+csr: pmpcfg3         0x0000000000000000
+csr: pmpaddr0        0x0000000000000000
+csr: pmpaddr1        0x0000000000000000
+csr: pmpaddr2        0x0000000000000000
+csr: pmpaddr3        0x0000000000000000
+csr: pmpaddr4        0x0000000000000000
+csr: pmpaddr5        0x0000000000000000
+csr: pmpaddr6        0x0000000000000000
+csr: pmpaddr7        0x0000000000000000
+csr: pmpaddr8        0x0000000000000000
+csr: pmpaddr9        0x0000000000000000
+csr: pmpaddr10       0x0000000000000000
+csr: pmpaddr11       0x0000000000000000
+csr: pmpaddr12       0x0000000000000000
+csr: pmpaddr13       0x0000000000000000
+csr: pmpaddr14       0x0000000000000000
+csr: pmpaddr15       0x0000000000000000
 ```
