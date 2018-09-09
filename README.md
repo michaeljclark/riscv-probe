@@ -44,12 +44,18 @@ libfemto is a lightweight bare-metal C library for embedded RISC-V development.
 libfemto provides:
 
 - Reduced set of the _POSIX.1-2017 / IEEE 1003.1-2017_ standard
+- Simple lightweight hardware configuration mechanism
 - RISC-V machine mode functions and macros
 - Console and power device drivers
 
 libfemto implements a reduced set of the _POSIX.1-2017 / IEEE 1003.1-2017_
-standard, with the addition of glibc's `getauxval` API to access configuration
-in an `__auxv` array containing tuples describing the target environment.
+standard, with the addition of glibc's `getauxval` API to access hardware
+configuration in an auxiliary vector (`__auxv`) that contains tuples describing
+the target environment. This is intended as a lightweight mechanism to pass
+dynamic configuration information for embedded targets, as an alternative to
+hardcoding constants used during hardware initialization. The auxiliary vector
+is repurposed to contain hardware configuration parameters such as clock
+frequencies and device base addresses.
 
 libfemto contains the following device drivers:
 
@@ -62,7 +68,12 @@ libfemto contains the following device drivers:
 ### Environments
 
 This project contains a simple build system that allows building applications
-targetting multiple embedded environments.
+targeting multiple embedded environments. A distinguishing characteristic of
+the build system is that program objects do not need to be recompiled to target
+a different environment, rather they are relinked with a different hardware
+configuration and setup function. The config object causes the correct drivers
+to be linked via compile time dependencies expressed by symbol references.
+The following environments are currently supported:
 
 - _default_ - environment where IO defaults to `ebreak`
 - _spike_- the RISC-V ISA Simulator Golden Model
@@ -73,10 +84,12 @@ targetting multiple embedded environments.
 
 To create a new environment simply add a directory to `env` with two files:
 
-- `default.lds` - linker script describing the memory layout
+- `default.lds` - linker script describing the target's memory layout
 - `config.c` - environment specific configuration
 
 The following is an example configuration from `env/<boardname>/config.c`
+showing the auxiliary vector used by `getauxval` via the `setup` function
+called by `_start` before entering `main`.
 
 ```
 auxval_t __auxv[] = {
