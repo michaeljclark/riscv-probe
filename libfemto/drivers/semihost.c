@@ -8,22 +8,23 @@ enum {
     SBI_SHUTDOWN = 8
 };
 
-#define __asm_semihost_call(...) \
-    __asm__ __volatile__ ("ecall\n\t" : "+r"(a0) : __VA_ARGS__ : "memory"); \
-    return a0;
+#define __syscall(...) \
+    asm volatile ("ecall\n\t" : "+r"(a0) : __VA_ARGS__ : "memory")
 
 static inline long semihost_call0(long n)
 {
     register long a7 __asm__("a7") = n;
     register long a0 __asm__("a0");
-    __asm_semihost_call("r"(a7))
+    __syscall("r"(a7));
+    return a0;
 }
 
 static inline long semihost_call1(long n, long a)
 {
     register long a7 __asm__("a7") = n;
     register long a0 __asm__("a0") = a;
-    __asm_semihost_call("r"(a7), "0"(a0))
+    __syscall("r"(a7), "0"(a0));
+    return a0;
 }
 
 static int semihost_getchar()
