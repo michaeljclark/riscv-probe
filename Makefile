@@ -72,7 +72,9 @@ build/lib/rv64/libfemto.a: $(LIBFEMTO_RV64_OBJ)
 # Target environment definitions
 #
 
-configs = rv32:spike \
+configs = rv32:default \
+          rv64:default \
+          rv32:spike \
           rv64:spike \
           rv32:virt \
           rv64:virt \
