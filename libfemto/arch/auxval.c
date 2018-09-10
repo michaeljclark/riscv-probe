@@ -4,7 +4,7 @@
 
 unsigned long getauxval(unsigned long key)
 {
-	auxval_t *auxv = __auxv;
+    auxval_t *auxv = __auxv;
     while(auxv->key) {
         if (auxv->key == key) {
             return auxv->val;
