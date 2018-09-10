@@ -11,6 +11,7 @@ extern "C" {
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdbits.h>
 #include <string.h>
 
 #include "auxval.h"
