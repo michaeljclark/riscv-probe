@@ -218,10 +218,34 @@ The symbols example program shows how to access these special symbols. They
 can be used for example to locate data section in a flat image in ROM to copy
 into memory and to zero the bss section.
 
+### user
+
+Simple example program that sets up PMP (Physical Memory Protection)
+to allow all memory accesses and then switches to U mode. The code to
+set up PMP to allow all memory access is `pmp_allow_all()` in `machine.h`.
+The code is derived from _bbl_.
+
+Note: PMP is enabled by default on systems that implement it, so it is
+mandatory to include code to configure PMPs to allow memory access when
+switching from M mode to S mode or U mode, otherwise memory accesses will trap.
+
+### enclave
+
+Simple enclave example using RISC-V PMP (Physical Memory Protection)
+
+Physical memory protection is enabled for the program text (RX)
+program data (RW), UART, and the hart is switch to U mode, however,
+there is only one program and the default trap vector points into
+the executable text, so traps are handled in M mode, in the same
+executable text segment.
+
+A future example will load a second process and provide ecall APIs
+to the process running in the protected enclave.
+
 ### probe
 
-`riscv-probe` is a utility that probes the Control and Status Register address
-space of a RISC-V emulator, FPGA or board:
+`riscv-probe` is a utility that probes the Control and Status Register
+address space of a RISC-V emulator, FPGA or board:
 
 #### qemu-system-riscv32
 

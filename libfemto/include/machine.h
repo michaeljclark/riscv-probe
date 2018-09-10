@@ -88,6 +88,16 @@ static inline void pmp_allow_all()
 }
 
 /*
+ * pmp_entry_set - configure a pmp entry
+ *
+ * - n    : pmp entry number
+ * - prot : protection (PMP_R | PMP_W | PMP_X)
+ * - addr : start address
+ * - len  : power of two length
+ */
+int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len);
+
+/*
  * set_mode_and_jump
  *
  * Set mstatus.mpp, sets mepc to passed function pointer and then issues mret
