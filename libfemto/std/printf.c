@@ -1,6 +1,8 @@
 // See LICENSE for license details.
 
 #include <stdio.h>
+#include <stddef.h>
+#include <stdarg.h>
 
 int printf(const char* s, ...)
 {
