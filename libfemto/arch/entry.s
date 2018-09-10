@@ -118,6 +118,8 @@ do_reset:
 
     # run init code, followed by main, then poweroff
     jal     setup
+    li      a0, 1
+    la      a1, argv
     jal     main
     j       poweroff
 
@@ -125,6 +127,13 @@ do_reset:
 park:
     wfi
     j       park
+
+    .data
+argv:
+    .ptr 0f
+    .ptr 0
+0:
+    .asciz "femto"
 
     .bss
     .align 4

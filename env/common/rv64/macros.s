@@ -17,3 +17,7 @@ ld \a, ((\b)*REGBYTES)(sp)
 .macro sxsp a, b
 sd \a, ((\b)*REGBYTES)(sp)
 .endm
+
+.macro .ptr a
+.8byte \a
+.endm
