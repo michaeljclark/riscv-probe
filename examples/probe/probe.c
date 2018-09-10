@@ -51,7 +51,7 @@ static void probe_all_csrs()
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	char buf[32];
 	printf("isa: %s\n", isa_string(buf, sizeof(buf)));

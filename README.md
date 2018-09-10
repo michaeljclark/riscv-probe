@@ -154,7 +154,7 @@ and `hello.c`
 $ cat examples/hello/hello.c 
 #include <stdio.h>
 
-int main()
+int main(int argc, char **argv)
 {
 	printf("hello\n");
 }

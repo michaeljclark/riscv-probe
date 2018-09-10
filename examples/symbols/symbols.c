@@ -11,7 +11,7 @@ extern char _data_end;
 extern char _bss_start;
 extern char _bss_end;
 
-int main()
+int main(int argc, char **argv)
 {
 	printf("_text_start=0x%x\n", &_text_start);
 	printf("_text_end=0x%x\n", &_text_end);

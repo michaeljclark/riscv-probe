@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main()
+int main(int argc, char **argv)
 {
 	volatile int a;
 	int b, c, d, e, f, g, h, i, j, k, l, m;

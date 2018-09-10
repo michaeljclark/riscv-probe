@@ -1,6 +1,6 @@
 #include "femto.h"
 
-int main()
+int main(int argc, char **argv)
 {
 	/*
 	 * Set up PMP (Physical Memory Protection)
