@@ -133,6 +133,7 @@ extern "C" {
 #define PMP_A     0x18
 #define PMP_L     0x80
 #define PMP_SHIFT 2
+#define PMP_COUNT 16
 
 #define PMP_OFF   0x00
 #define PMP_TOR   0x08
