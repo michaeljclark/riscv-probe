@@ -14,3 +14,5 @@
 .globl _data_end
 .globl _bss_start
 .globl _bss_end
+.global _memory_start;
+.global _memory_end;

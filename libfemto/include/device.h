@@ -14,7 +14,7 @@ typedef struct console_device {
 
 typedef struct poweroff_device {
     void (*init)();
-    void (*poweroff)(void) __attribute__((noreturn));
+    void (*poweroff)(int);
 } poweroff_device_t;
 
 void register_console(console_device_t *dev);

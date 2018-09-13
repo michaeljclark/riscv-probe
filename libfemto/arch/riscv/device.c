@@ -28,9 +28,11 @@ int putchar(int ch)
     return console_dev->putchar(ch);
 }
 
-void poweroff()
+void exit(int status)
 {
-    poweroff_dev->poweroff();
+    poweroff_dev->poweroff(status);
+    asm volatile("1: j 1b");
+    __builtin_unreachable();
 }
 
 static int default_getchar()
@@ -45,7 +47,7 @@ static int default_putchar(int ch)
     return 0;
 }
 
-static __attribute__((noreturn)) void default_poweroff()
+static void default_poweroff(int status)
 {
     asm volatile("ebreak");
     while (1) {

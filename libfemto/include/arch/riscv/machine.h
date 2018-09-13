@@ -9,12 +9,11 @@ extern "C" {
 #include <stdint.h>
 #include <stddef.h>
 
-void setup();
-void poweroff(void) __attribute__((noreturn));
+void arch_setup();
+void exit(int status) __attribute__((noreturn));
 
 #define die(str, ...) ({ \
-  printf("%s:%d: " str "\n", __FILE__, __LINE__, ##__VA_ARGS__); \
-  poweroff(); })
+  printf("%s:%d: " str "\n", __FILE__, __LINE__, ##__VA_ARGS__); exit(-1); })
 
 #define assert(x) ({ if (!(x)) die("assertion failed: %s", #x); })
 

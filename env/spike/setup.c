@@ -6,7 +6,7 @@ auxval_t __auxv[] = {
     { 0, 0 }
 };
 
-void setup()
+void arch_setup()
 {
     register_console(&console_htif);
     register_poweroff(&poweroff_htif);

@@ -213,6 +213,8 @@ Symbol           | Value
 `_data_end`      | end of `.data` section
 `_bss_start`     | start of `.bss` section
 `_bss_end`       | end of `.bss` section
+`_memory_start`  | start of RAM
+`_memory_end`    | end of RAM
 
 The symbols example program shows how to access these special symbols. They
 can be used for example to locate data section in a flat image in ROM to copy

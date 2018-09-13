@@ -116,12 +116,8 @@ do_reset:
     csrr    a0, mhartid
     bnez    a0, park
 
-    # run init code, followed by main, then poweroff
-    jal     setup
-    li      a0, 1
-    la      a1, argv
-    jal     main
-    j       poweroff
+    # jump to libfemto_start_main
+    j       libfemto_start_main
 
     # sleeping harts mtvec calls trap_fn upon receiving IPI
 park:

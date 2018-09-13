@@ -10,7 +10,7 @@ auxval_t __auxv[] = {
     { 0, 0 }
 };
 
-void setup()
+void arch_setup()
 {
     register_console(&console_sifive_uart);
     register_poweroff(&poweroff_sifive_test);

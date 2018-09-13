@@ -131,7 +131,7 @@ void free(void* ptr)
 	}
 }
 
-void malloc_addblock(void* addr, size_t size)
+void _malloc_addblock(void* addr, size_t size)
 {
 	alloc_node_t* blk;
 

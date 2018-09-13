@@ -69,7 +69,7 @@ static int htif_putchar(int ch)
     return ch & 0xff;
 }
 
-static __attribute__((noreturn)) void htif_poweroff()
+static void htif_poweroff(int status)
 {
     for (;;) {
         htif_set_tohost(0, 0, 1);

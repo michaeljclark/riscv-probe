@@ -9,7 +9,7 @@ auxval_t __auxv[] = {
     { 0, 0 }
 };
 
-void setup()
+void arch_setup()
 {
     /*
      * clock setup code should be placed here and should modify the

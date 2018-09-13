@@ -4,6 +4,7 @@ ENTRY( _start )
 
 MEMORY
 {
+  htif  (wxa!ri) : ORIGIN = 0x88000000, LENGTH = 4K
   ram   (wxa!ri) : ORIGIN = 0x80000000, LENGTH = 128M
 }
 
@@ -12,6 +13,7 @@ PHDRS
   text PT_LOAD;
   data PT_LOAD;
   bss PT_LOAD;
+  htif PT_LOAD;
 }
 
 SECTIONS
@@ -41,6 +43,9 @@ SECTIONS
   } >ram AT>ram :bss
 
   .htif   : {
-    . = ALIGN(8); *(.htif)
-  } >ram AT>ram :data
+    . = ALIGN(1024); *(.htif)
+  } >htif AT>htif :htif
+
+  PROVIDE(_memory_start = ORIGIN(ram));
+  PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
 }

@@ -14,7 +14,7 @@ static void sifive_test_init()
 	test = (uint32_t *)(void *)getauxval(SIFIVE_TEST_CTRL_ADDR);
 }
 
-static __attribute__((noreturn)) void sifive_test_poweroff()
+static void sifive_test_poweroff(int status)
 {
     *test = SIFIVE_TEST_PASS;
     while (1) {

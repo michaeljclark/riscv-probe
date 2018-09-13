@@ -39,7 +39,7 @@ static int semihost_putchar(int ch)
     semihost_call1(SBI_CONSOLE_PUTCHAR, ch);
 }
 
-static __attribute__((noreturn)) void semihost_poweroff()
+static void semihost_poweroff(int status)
 {
     semihost_call0(SBI_SHUTDOWN);
     __builtin_unreachable();

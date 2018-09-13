@@ -12,9 +12,7 @@
 
 _start:
     la      sp, stacks + STACK_SIZE
-    jal     setup
-    jal     main
-    j       poweroff
+    j       libfemto_start_main
 
     .bss
     .align 4

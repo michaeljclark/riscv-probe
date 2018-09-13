@@ -39,4 +39,7 @@ SECTIONS
     *(.sbss .sbss.*) *(.bss .bss.*)
     PROVIDE(_bss_end = .);
   } >ram AT>ram :bss
+
+  PROVIDE(_memory_start = ORIGIN(ram));
+  PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
 }
