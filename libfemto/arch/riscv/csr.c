@@ -1,6 +1,9 @@
 // See LICENSE for license details.
 
 #include "femto.h"
+#include "arch/riscv/csr.h"
+#include "arch/riscv/encoding.h"
+#include "arch/riscv/machine.h"
 
 static int all_csr_enums[] = {
     csr_fflags,

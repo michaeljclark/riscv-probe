@@ -16,11 +16,6 @@ extern "C" {
 
 #include "auxval.h"
 #include "device.h"
-#include "atomic.h"
-#include "encoding.h"
-#include "machine.h"
-#include "csr.h"
-#include "trap.h"
 
 #ifdef __cplusplus
 }

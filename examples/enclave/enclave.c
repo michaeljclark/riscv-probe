@@ -9,6 +9,8 @@
  *       the executable text, so traps are handled in M mode, in the same
  *       executable text segment. A more complete example needs to load a
  *       second process and provide ecall APIs to the protected enclave.
+ *       This is not yet a true secure enclave until two disjunctive worlds
+ *       are have been implemented with measured boot and signed code.
  */
 
 extern char _text_start;
@@ -21,6 +23,12 @@ static uintptr_t uart_keys[] = {
 	NS16550A_UART0_CTRL_ADDR,
 	0
 };
+
+#ifdef __riscv
+#include "arch/riscv/encoding.h"
+#include "arch/riscv/machine.h"
+#include "arch/riscv/csr.h"
+#endif
 
 int main()
 {
@@ -48,6 +56,7 @@ int main()
 		printf("uart: 0x%x - 0x%x\n", uart, uart + uartlen - 1);
 	}
 
+#ifdef __riscv
 	/* set up physical memory protection */
 	pmp_entry_set(0, PMP_R | PMP_X, rx_s, rx_l);
 	pmp_entry_set(1, PMP_R | PMP_W, rw_s, rw_l);
@@ -57,5 +66,8 @@ int main()
 
 	/* switch to user mode enclave */
 	set_mode_and_continue(PRV_U);
-	puts("enclave");
+	puts("riscv-enclave");
+#else
+	puts("architecture-not-supported");
+#endif
 }

@@ -1,7 +1,9 @@
 // See LICENSE for license details.
 
-#include "atomic.h"
+#ifdef __riscv
+
 #include "femto.h"
+#include "arch/riscv/atomic.h"
 
 volatile uint64_t tohost __attribute__((section(".htif")));
 volatile uint64_t fromhost __attribute__((section(".htif")));
@@ -85,3 +87,5 @@ poweroff_device_t poweroff_htif = {
     NULL,
     htif_poweroff
 };
+
+#endif

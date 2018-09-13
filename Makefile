@@ -12,8 +12,8 @@ LDFLAGS            = -nostartfiles -nostdlib -nostdinc -static \
                      -Wl,--nmagic -Wl,--gc-sections
 INCLUDES           = -Ienv/common -Ilibfemto/include
 
-LIBFEMTO_SRCS      = $(sort $(foreach d,std arch drivers,$(wildcard libfemto/$(d)/*.c)))
-LIBFEMTO_ASM       = $(sort $(foreach d,std arch drivers,$(wildcard libfemto/$(d)/*.s)))
+LIBFEMTO_SRCS      = $(sort $(foreach d,std drivers arch/riscv,$(wildcard libfemto/$(d)/*.c)))
+LIBFEMTO_ASM       = $(sort $(foreach d,std drivers arch/riscv,$(wildcard libfemto/$(d)/*.s)))
 LIBFEMTO_OBJS      = $(patsubst %.s,%.o,$(LIBFEMTO_ASM)) \
                      $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
 LIBFEMTO_RV32_OBJ  = $(addprefix build/obj/rv32/,$(LIBFEMTO_OBJS))

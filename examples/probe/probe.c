@@ -1,5 +1,11 @@
 #include "femto.h"
 
+#ifdef __riscv
+#include "arch/riscv/csr.h"
+#include "arch/riscv/trap.h"
+#include "arch/riscv/encoding.h"
+#include "arch/riscv/machine.h"
+
 #define MCAUSE_UNSET 0xabbaabba
 
 static uintptr_t save_mcause;
@@ -50,11 +56,16 @@ static void probe_all_csrs()
 		csrenum++;
 	}
 }
+#endif
 
 int main(int argc, char **argv)
 {
+#ifdef __riscv
 	char buf[32];
 	printf("isa: %s\n", isa_string(buf, sizeof(buf)));
 	probe_all_csrs();
 	printf("\n");
+#else
+	puts("architecture-not-supported");
+#endif
 }

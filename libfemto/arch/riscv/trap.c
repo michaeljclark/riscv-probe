@@ -1,6 +1,9 @@
 // See LICENSE for license details.
 
 #include "femto.h"
+#include "arch/riscv/trap.h"
+#include "arch/riscv/encoding.h"
+#include "arch/riscv/machine.h"
 
 static trap_fn tfn = 0;
 

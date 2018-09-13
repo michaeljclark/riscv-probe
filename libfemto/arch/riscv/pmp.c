@@ -1,6 +1,8 @@
 // See LICENSE for license details.
 
 #include "femto.h"
+#include "arch/riscv/csr.h"
+#include "arch/riscv/encoding.h"
 
 int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
 {

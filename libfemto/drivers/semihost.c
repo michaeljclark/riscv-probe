@@ -1,5 +1,7 @@
 // See LICENSE for license details.
 
+#ifdef __riscv
+
 #include "femto.h"
 
 enum {
@@ -54,3 +56,5 @@ poweroff_device_t poweroff_semihost = {
 	NULL,
 	semihost_poweroff
 };
+
+#endif

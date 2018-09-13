@@ -1,5 +1,10 @@
 #include "femto.h"
 
+#ifdef __riscv
+#include "arch/riscv/encoding.h"
+#include "arch/riscv/machine.h"
+#endif
+
 int main(int argc, char **argv)
 {
 	/*
@@ -10,7 +15,11 @@ int main(int argc, char **argv)
 	 * We should change this code to restrict user mode to its .text
 	 * .rodata, .data, .bss and devices.
 	 */
+#ifdef __riscv
 	pmp_allow_all();
 	set_mode_and_continue(PRV_U);
-	puts("user");
+	puts("riscv-user-mode");
+#else
+	puts("architecture-not-supported");
+#endif
 }
