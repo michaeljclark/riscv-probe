@@ -1,12 +1,14 @@
 // See LICENSE for license details.
 
 #include <stdio.h>
+#include <alloca.h>
 
 int vprintf(const char* s, va_list vl)
 {
-    char buf[256], *o = buf;
-    int res = vsnprintf(buf, sizeof(buf) - 1, s, vl);
-    buf[sizeof(buf) - 1] = '\0';
-    while (*o) putchar(*o++);
+    char *out;
+    int res = vsnprintf(NULL, -1, s, vl);
+    out = alloca(res + 1);
+    vsnprintf(out, res + 1, s, vl);
+    while (*out) putchar(*out++);
     return res;
 }
