@@ -45,7 +45,7 @@ static void probe_all_csrs()
 		if (save_mcause != MCAUSE_UNSET) {
 			int async = save_mcause < 0;
 			int cause = save_mcause & (((uintptr_t)-1) >> async);
-			printf("csr: %s%s %s cause=0x%x mtval=0x%x\n",
+			printf("csr: %s%s %s cause=%ld mtval=0x%lx\n",
 				csrname, ws + strlen(csrname), cause < 16
 				? (async ? riscv_intr_names : riscv_excp_names)[cause]
 				: "(unknown)", save_mcause, read_csr_enum(csr_mtval));
