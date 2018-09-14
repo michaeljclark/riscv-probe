@@ -18,23 +18,6 @@ void register_poweroff(poweroff_device_t *dev)
     }
 }
 
-int getchar()
-{
-    return console_dev->getchar();
-}
-
-int putchar(int ch)
-{
-    return console_dev->putchar(ch);
-}
-
-void exit(int status)
-{
-    poweroff_dev->poweroff(status);
-    asm volatile("1: j 1b");
-    __builtin_unreachable();
-}
-
 static int default_getchar()
 {
     asm volatile("ebreak");

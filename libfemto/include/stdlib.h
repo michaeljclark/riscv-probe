@@ -6,7 +6,8 @@ extern "C" {
 
 #include <stddef.h>
 
-void exit(int status);
+__attribute__((noreturn)) void abort(void);
+__attribute__((noreturn)) void exit(int status);
 void* malloc(size_t size);
 void free(void* ptr);
 void _malloc_addblock(void* addr, size_t size);
