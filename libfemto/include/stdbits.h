@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #if __SIZE_WIDTH__ == 32
@@ -52,3 +56,7 @@ int ctz64(int64_t val);
 
 #define ispow2(val) ((val) && !((val) & ((val)-1)))
 #define roundpow2(val) (1<<((sizeof(val)>>3)-clz(val-1)))
+
+#ifdef __cplusplus
+}
+#endif

@@ -2,10 +2,6 @@
 
 #pragma once
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
@@ -16,7 +12,3 @@ extern "C" {
 
 #include "auxval.h"
 #include "device.h"
-
-#ifdef __cplusplus
-}
-#endif
