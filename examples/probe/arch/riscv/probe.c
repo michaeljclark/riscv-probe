@@ -56,16 +56,12 @@ static void probe_all_csrs()
 		csrenum++;
 	}
 }
-#endif
 
-int main(int argc, char **argv)
+void probe_all()
 {
-#ifdef __riscv
 	char buf[32];
 	printf("isa: %s\n", isa_string(buf, sizeof(buf)));
 	probe_all_csrs();
 	printf("\n");
-#else
-	puts("architecture-not-supported");
-#endif
 }
+#endif

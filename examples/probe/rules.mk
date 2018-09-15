@@ -1,1 +1,1 @@
-probe_objs = probe.o
+probe_objs = main.o arch/generic/probe.o arch/riscv/probe.o
