@@ -124,13 +124,6 @@ park:
     wfi
     j       park
 
-    .data
-argv:
-    .ptr 0f
-    .ptr 0
-0:
-    .asciz "femto"
-
     .bss
     .align 4
 stacks:
