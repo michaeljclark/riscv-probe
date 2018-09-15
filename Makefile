@@ -1,6 +1,6 @@
-RISCV_PREFIX       ?= riscv64-unknown-elf-
+CROSS_COMPILE      ?= riscv64-unknown-elf-
 
-AR                 = $(RISCV_PREFIX)ar
+AR                 = $(CROSS_COMPILE)ar
 
 CFLAGS             = -mcmodel=medany -ffunction-sections -fdata-sections
 LDFLAGS            = -nostartfiles -nostdlib -nostdinc -static -lgcc \
@@ -23,11 +23,11 @@ libs               = libfemto
 
 configs            = rv32imac rv64imac
 
-CC_rv32imac        = $(RISCV_PREFIX)gcc
+CC_rv32imac        = $(CROSS_COMPILE)gcc
 CFLAGS_rv32imac    = -Os -march=rv32imac -mabi=ilp32 -Ienv/common/rv32
 LDFLAGS_rv32imac   =
 
-CC_rv64imac        = $(RISCV_PREFIX)gcc
+CC_rv64imac        = $(CROSS_COMPILE)gcc
 CFLAGS_rv64imac    = -Os -march=rv64imac -mabi=lp64  -Ienv/common/rv64
 LDFLAGS_rv64imac   =
 

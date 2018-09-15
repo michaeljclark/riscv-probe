@@ -27,10 +27,10 @@ A recent version of `riscv-tools` with a multilib build of RISC-V GCC.
 
 ## Build
 
-The build system uses `RISCV_PREFIX` as the toolchain prefix and expects
+The build system uses `CROSS_COMPILE` as the toolchain prefix and expects
 the toolchain to be present in the `PATH` environment variable. The default
-value for `RISCV_PREFIX` is `riscv64-unknown-elf-` however this can be
-overridden e.g. `make RISCV_PREFIX=riscv64-unknown-linux-gnu-`. The build
+value for `CROSS_COMPILE` is `riscv64-unknown-elf-` however this can be
+overridden e.g. `make CROSS_COMPILE=riscv64-unknown-linux-gnu-`. The build
 system expects a multilib toolchain as it uses the same toolchain to build
 for _riscv32_ and _riscv64_. Make sure to use `--enable-multilib` when
 configuring [riscv-gnu-toolchain](https://github.com/riscv/riscv-gnu-toolchain).
