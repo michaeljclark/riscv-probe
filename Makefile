@@ -5,17 +5,21 @@ AR                 = $(RISCV_PREFIX)ar
 CFLAGS             = -mcmodel=medany -ffunction-sections -fdata-sections
 LDFLAGS            = -nostartfiles -nostdlib -nostdinc -static -lgcc \
                      -Wl,--nmagic -Wl,--gc-sections
-INCLUDES           = -Ienv/common -Ilibfemto/include
+INCLUDES           = -Ienv/common
 
-LIBFEMTO_DIRS      = libfemto/std libfemto/drivers libfemto/arch/riscv
-LIBFEMTO_SRCS      = $(sort $(foreach d,$(LIBFEMTO_DIRS),$(wildcard $(d)/*.c)))
-LIBFEMTO_ASM       = $(sort $(foreach d,$(LIBFEMTO_DIRS),$(wildcard $(d)/*.s)))
-LIBFEMTO_OBJS      = $(patsubst %.s,%.o,$(LIBFEMTO_ASM)) \
-                     $(patsubst %.c,%.o,$(LIBFEMTO_SRCS))
+libfemto_dirs      = libfemto/std libfemto/drivers libfemto/arch/riscv
+libfemto_src       = $(sort $(foreach d,$(libfemto_dirs),$(wildcard $(d)/*.c)))
+libfemto_asm       = $(sort $(foreach d,$(libfemto_dirs),$(wildcard $(d)/*.s)))
+libfemto_objs      = $(patsubst %.s,%.o,$(libfemto_asm)) \
+                     $(patsubst %.c,%.o,$(libfemto_src))
 
 #
-# Compiler configuration
+# Compiler configurations and target environment definitions
 #
+
+subdirs            = examples
+
+libs               = libfemto
 
 configs            = rv32imac rv64imac
 
@@ -26,10 +30,6 @@ LDFLAGS_rv32imac   =
 CC_rv64imac        = $(RISCV_PREFIX)gcc
 CFLAGS_rv64imac    = -Os -march=rv64imac -mabi=lp64  -Ienv/common/rv64
 LDFLAGS_rv64imac   =
-
-#
-# Target environment definitions
-#
 
 targets            = rv32imac:default \
                      rv64imac:default \
@@ -72,29 +72,34 @@ endif
 define pattern =
 build/obj/$(2)/%.o: %.$(3)
 	$(call cmd,$(1).$(2) $$@,$$(@D),$(CC_$(2)) $(CFLAGS_$(2)) $(CFLAGS) \
-	$(INCLUDES) -c $$^ -o $$@)
+	$$(INCLUDES) -c $$^ -o $$@)
 endef
 
 $(foreach c,$(configs),$(eval $(call pattern,CC,$(c),c)))
 $(foreach c,$(configs),$(eval $(call pattern,AS,$(c),s)))
 
 #
-# Build system functions to generate libraries
+# Build system functions to generate library rules for all configs
 #
 
 define archive =
-build/lib/$(2)/$(3): $(addprefix build/obj/$(2)/,$(4))
+build/lib/$(2)/$(3).a: $(addprefix build/obj/$(2)/,$($(3)_objs))
 	$(call cmd,$(1).$(2) $$@,$$(@D),$(AR) cr $$@ $$^)
+LIBS_$(2) += build/lib/$(2)/$(3).a
 endef
 
-$(foreach c,$(configs),$(eval $(call archive,AR,$(c),libfemto.a,$(LIBFEMTO_OBJS))))
+define lib =
+$(foreach c,$(configs),$(eval $(call archive,AR,$(c),$(1))))
+INCLUDES += -I$(1)/include
+endef
+
+$(foreach l,$(libs),$(eval $(call lib,$(l))))
 
 #
-# Build system functions to generate build rules for all targets
+# Build system functions to generate build rules for all subdirs
 #
 
-build_dirs = examples
-sub_makes := $(foreach dir,$(build_dirs),$(wildcard ${dir}/*/rules.mk))
+sub_makes := $(foreach dir,$(subdirs),$(wildcard ${dir}/*/rules.mk))
 $(foreach makefile,$(sub_makes),$(eval include $(makefile)))
 sub_dirs := $(foreach m,$(sub_makes),$(m:/rules.mk=))
 module_name = $(lastword $(subst /, ,$(1)))
@@ -103,8 +108,7 @@ config_arch = $(word 1,$(subst :, ,$(1)))
 config_env = $(word 2,$(subst :, ,$(1)))
 
 define rule =
-build/bin/$(3)/$(4)/$(1): build/obj/$(3)/env/$(4)/setup.o $(2) \
-build/lib/$(3)/libfemto.a
+build/bin/$(3)/$(4)/$(1): build/obj/$(3)/env/$(4)/setup.o $(2) $$(LIBS_$(3))
 	$$(call cmd,LD.$(3) $$@,$$(@D),$(CC_$(3)) $(CFLAGS_$(3)) $$(CFLAGS) \
 	$$(LDFLAGS_$(3)) $$(LDFLAGS) -T env/$(4)/default.lds $$^ -o $$@)
 endef
