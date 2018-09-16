@@ -160,45 +160,6 @@ int main(int argc, char **argv)
 }
 ```
 
-### tiny
-
-The `_start` symbol in _libfemto_ is a weak symbol so it is also possible
-to override the default entry stub with your own code. The following is from
-the _tiny_ example:
-
-```
-$ cat examples/tiny/rules.mk 
-tiny_objs = entry.o tiny.o
-```
-
-Here is the modified `entry.s`
-
-```
-$ cat examples/tiny/entry.s 
-# See LICENSE for license details.
-
-.include "macros.s"
-.include "constants.s"
-
-#
-# start of trap handler
-#
-
-.section .text.init,"ax",@progbits
-.globl _start
-
-_start:
-    la      sp, stacks + STACK_SIZE
-    jal     setup
-    jal     main
-    j       poweroff
-
-    .bss
-    .align 4
-stacks:
-    .skip STACK_SIZE
-```
-
 ### symbols
 
 libfemto linker scripts define the following special symbols:
