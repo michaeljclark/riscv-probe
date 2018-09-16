@@ -108,7 +108,8 @@ config_arch = $(word 1,$(subst :, ,$(1)))
 config_env = $(word 2,$(subst :, ,$(1)))
 
 define rule =
-build/bin/$(3)/$(4)/$(1): build/obj/$(3)/env/$(4)/setup.o $(2) $$(LIBS_$(3))
+build/bin/$(3)/$(4)/$(1): \
+build/obj/$(3)/env/$(4)/crt.o build/obj/$(3)/env/$(4)/setup.o $(2) $$(LIBS_$(3))
 	$$(call cmd,LD.$(3) $$@,$$(@D),$(CC_$(3)) $(CFLAGS_$(3)) $$(CFLAGS) \
 	$$(LDFLAGS_$(3)) $$(LDFLAGS) -T env/$(4)/default.lds $$^ -o $$@)
 endef
