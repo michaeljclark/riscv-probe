@@ -4,8 +4,8 @@ AR                 = $(CROSS_COMPILE)ar
 
 CFLAGS             = -mcmodel=medany -ffunction-sections -fdata-sections
 LDFLAGS            = -nostartfiles -nostdlib -nostdinc -static -lgcc \
-                     -Wl,--nmagic -Wl,--gc-sections
-INCLUDES           = -Ienv/common
+                     -Wl,--gc-sections -Wl,--nmagic
+INCLUDES           = -Ienv/common -Ilibfemto/include
 
 libfemto_dirs      = libfemto/std libfemto/drivers libfemto/arch/riscv
 libfemto_src       = $(sort $(foreach d,$(libfemto_dirs),$(wildcard $(d)/*.c)))
@@ -21,7 +21,7 @@ subdirs            = examples
 
 libs               = libfemto
 
-configs            = rv32imac rv64imac
+configs            = rv32imac rv64imac rv32imac_pie rv64imac_pie
 
 CC_rv32imac        = $(CROSS_COMPILE)gcc
 CFLAGS_rv32imac    = -Os -march=rv32imac -mabi=ilp32 -Ienv/common/rv32
@@ -30,6 +30,14 @@ LDFLAGS_rv32imac   =
 CC_rv64imac        = $(CROSS_COMPILE)gcc
 CFLAGS_rv64imac    = -Os -march=rv64imac -mabi=lp64  -Ienv/common/rv64
 LDFLAGS_rv64imac   =
+
+CC_rv32imac_pie      = $(CROSS_COMPILE)gcc
+CFLAGS_rv32imac_pie  = -Os -fPIC -march=rv32imac -mabi=ilp32 -Ienv/common/rv32
+LDFLAGS_rv32imac_pie = -shared -Wl,-Bsymbolic
+
+CC_rv64imac_pie      = $(CROSS_COMPILE)gcc
+CFLAGS_rv64imac_pie  = -Os -fPIC -march=rv64imac -mabi=lp64  -Ienv/common/rv64
+LDFLAGS_rv64imac_pie = -shared -Wl,-Bsymbolic
 
 targets            = rv32imac:default \
                      rv64imac:default \
@@ -41,7 +49,9 @@ targets            = rv32imac:default \
                      rv64imac:qemu-sifive_e \
                      rv32imac:qemu-sifive_u \
                      rv64imac:qemu-sifive_u \
-                     rv32imac:coreip-e2-arty
+                     rv32imac:coreip-e2-arty \
+                     rv32imac_pie:semihost \
+                     rv64imac_pie:semihost
 
 #
 # make rules
