@@ -29,10 +29,10 @@
 #define htobe32(x) ((uint32_t)(x))
 #define htole32(x) bswap32((x))
 #define be32toh(x) ((uint32_t)(x))
-#define le64toh(x) bswap64((x))
+#define le32toh(x) bswap32((x))
 
 #define htobe64(x) ((uint64_t)(x))
 #define htole64(x) bswap64((x))
 #define be64toh(x) ((uint64_t)(x))
-#define le32toh(x) bswap32((x))
+#define le64toh(x) bswap64((x))
 #endif
