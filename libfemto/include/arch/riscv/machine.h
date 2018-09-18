@@ -59,6 +59,8 @@ __attribute__((noreturn)) static inline void mret()
     __builtin_unreachable();
 }
 
+uintptr_t memory_probe(uintptr_t start, uintptr_t limit);
+
 /*
  * - PMP is optional
  * - PMP enforcement is mandatory by default if PMP is implemented
