@@ -8,7 +8,7 @@
 
 #define MCAUSE_UNSET 0xabbaabba
 
-static uintptr_t save_mcause;
+static volatile uintptr_t save_mcause;
 
 static void trap_save_cause(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
