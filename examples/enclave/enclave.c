@@ -57,6 +57,10 @@ int main()
 	}
 
 #ifdef __riscv
+    if (pmp_entry_count() == 0) {
+        puts("pmp-not-supported");
+        return 0;
+    }
 	/* set up physical memory protection */
 	pmp_entry_set(0, PMP_R | PMP_X, rx_s, rx_l);
 	pmp_entry_set(1, PMP_R | PMP_W, rw_s, rw_l);

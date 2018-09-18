@@ -87,6 +87,11 @@ static inline void pmp_allow_all()
 }
 
 /*
+ * pmp_entry_count - return number of implemented PMP entries
+ */
+int pmp_entry_count();
+
+/*
  * pmp_entry_set - configure a pmp entry
  *
  * - n    : pmp entry number

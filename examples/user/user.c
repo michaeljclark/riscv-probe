@@ -16,7 +16,9 @@ int main(int argc, char **argv)
 	 * .rodata, .data, .bss and devices.
 	 */
 #ifdef __riscv
-	pmp_allow_all();
+	if (pmp_entry_count() > 0) {
+		pmp_allow_all();
+	}
 	set_mode_and_continue(PRV_U);
 	puts("riscv-user-mode");
 #else
