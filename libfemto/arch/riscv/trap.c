@@ -45,7 +45,12 @@ const char * riscv_intr_names[16] = {
     "reserved"
 };
 
-void register_trap_fn(trap_fn fn)
+trap_fn get_trap_fn()
+{
+    return tfn;
+}
+
+void set_trap_fn(trap_fn fn)
 {
     tfn = fn;
 }

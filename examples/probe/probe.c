@@ -37,7 +37,7 @@ static void probe_all_csrs()
 	int *csrenum = csr_enum_array();
 	const char **csrnames = csr_name_array();
 	const char* ws = "               ";
-	register_trap_fn(trap_save_cause);
+	set_trap_fn(trap_save_cause);
 	while (*csrenum != csr_none) {
 		save_mcause = MCAUSE_UNSET;
 		long value = read_csr_enum(*csrenum);
