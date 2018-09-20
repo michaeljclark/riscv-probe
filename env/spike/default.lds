@@ -4,7 +4,6 @@ ENTRY( _start )
 
 MEMORY
 {
-  htif  (wxa!ri) : ORIGIN = 0x88000000, LENGTH = 4K
   ram   (wxa!ri) : ORIGIN = 0x80000000, LENGTH = 128M
 }
 
@@ -30,6 +29,10 @@ SECTIONS
     PROVIDE(_rodata_end = .);
   } >ram AT>ram :text
 
+  .htif   : {
+    . = ALIGN(4096); *(.htif)
+  } >ram AT>ram :text
+
   .data : {
     PROVIDE(_data_start = .);
     *(.sdata .sdata.*) *(.data .data.*)
@@ -41,10 +44,6 @@ SECTIONS
     *(.sbss .sbss.*) *(.bss .bss.*)
     PROVIDE(_bss_end = .);
   } >ram AT>ram :bss
-
-  .htif   : {
-    . = ALIGN(1024); *(.htif)
-  } >htif AT>htif :htif
 
   PROVIDE(_memory_start = ORIGIN(ram));
   PROVIDE(_memory_end = ORIGIN(ram) + LENGTH(ram));
