@@ -119,7 +119,7 @@ int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
 
     /* calculate PMP config register and offset */
     int pmpcfg_csr = (__riscv_xlen == 32) ? csr_pmpcfg0 + (n >> 2) :
-                     (__riscv_xlen == 64) ? csr_pmpcfg0 + (n >> 3) << 1 : -1;
+                     (__riscv_xlen == 64) ? csr_pmpcfg0 + (n >> 2) & ~1 : -1;
     int pmpcfg_shift = (__riscv_xlen == 32) ? (n & 3) << 3 :
                        (__riscv_xlen == 64) ? (n & 7) << 3 : -1;
     if (pmpcfg_csr < 0 || pmpcfg_shift < 0) {
