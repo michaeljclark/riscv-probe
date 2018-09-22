@@ -9,8 +9,8 @@ extern char _memory_start;
 int main(int argc, char **argv)
 {
 #ifdef __riscv
-	uintptr_t memory_limit = memory_probe((uintptr_t)&_memory_start, -1UL);
-	printf("memory_start=0x%lx - 0x%lx\n", &_memory_start, memory_limit);
+	memory_info_t info = memory_probe();
+	printf("memory_start=0x%lx - 0x%lx\n", info.start, info.end);
 #else
 	puts("architecture-not-supported");
 #endif

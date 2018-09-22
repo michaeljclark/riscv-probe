@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	if (pmp_entry_count() > 0) {
 		pmp_allow_all();
 	}
-	set_mode_and_continue(PRV_U);
+	mode_set_and_continue(PRV_U);
 	puts("riscv-user-mode");
 #else
 	puts("architecture-not-supported");

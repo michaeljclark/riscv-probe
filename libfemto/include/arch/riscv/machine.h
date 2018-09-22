@@ -59,42 +59,79 @@ __attribute__((noreturn)) static inline void mret()
     __builtin_unreachable();
 }
 
-uintptr_t memory_probe(uintptr_t start, uintptr_t limit);
 
 /*
- * - PMP is optional
- * - PMP enforcement is mandatory by default if PMP is implemented
- *   meaning loads, stores or instruction fetches from modes higher
- *   than M mode will fail unless explicitly allowed. This means
- *   PMP must be configured irregardless of whether it is implemented.
- * - PMP can be unimplemented, wired to zero, or may trap
+ * Memory
+ *
+ * TODO - improve this API to return a list of memory segments
  */
-static inline void pmp_allow_all()
+
+typedef struct memory_info
 {
-  /* borrowed from bbl. set up a PMP to permit access to all of memory.
-   * Ignore the illegal-instruction trap if PMPs aren't supported. */
-  uintptr_t pmpc = PMP_NAPOT | PMP_R | PMP_W | PMP_X;
-  asm volatile ("la t0, 1f\n\t"
-                "csrrw t0, mtvec, t0\n\t"
-                "csrw pmpaddr0, %1\n\t"
-                "csrw pmpcfg0, %0\n\t"
-                ".align 2\n\t"
-                "1: csrw mtvec, t0"
-                : : "r" (pmpc), "r" (-1UL) : "t0");
-            /*                        ^ Reserved
-             * Section 3.6.1 Physical Memory Protection CSRs
-             * Table 3.9: NAPOT range encoding in PMP address and
-             * configuration registers: 1111...1111 NAPOT Reserved
-             */
-}
+    uintptr_t start;
+    uintptr_t end;
+} memory_info_t;
+
 
 /*
- * pmp_entry_count - return number of implemented PMP entries
+ * memory_probe - return memory_info
+ */
+memory_info_t memory_probe();
+
+/*
+ * memory_probe_range - probe a memory address range
+ */
+uintptr_t memory_probe_range(uintptr_t start, uintptr_t end);
+
+
+/*
+ * Physical Memory Protection
+ *
+ * PMP is optional but if implememented, enforcement must be enabled by
+ * default, if no PMP entries are set. This means loads, stores or fetches
+ * from any mode besides M mode, will fail unless explicitly allowed.
+ * PMP must be configured irregardless of whether it is implemented.
+ */
+
+typedef struct pmp_info
+{
+    int width;
+    int granularity;
+    int count;
+} pmp_info_t;
+
+/*
+ * pmp_probe - return pmp_info
+ */
+pmp_info_t pmp_probe();
+
+/*
+ * pmp_entry_granularity - return PMP entry width (physical memory width)
+ */
+int pmp_entry_width();
+
+/*
+ * pmp_entry_granularity - return PMP entry granularity (smallest entry size)
+ */
+int pmp_entry_granularity();
+
+/*
+ * pmp_entry_count - return number of PMP entries
  */
 int pmp_entry_count();
 
 /*
- * pmp_entry_set - configure a pmp entry
+ * pmp_clear_all - set PMP to disallow mode != PRV_M physical memory accesses
+ */
+void pmp_clear_all();
+
+/*
+ * pmp_allow_all - set PMP to allow mode != PRV_M physical memory accesses
+ */
+void pmp_allow_all();
+
+/*
+ * pmp_entry_set - set one PMP entry
  *
  * - n    : pmp entry number
  * - prot : protection (PMP_R | PMP_W | PMP_X)
@@ -103,13 +140,18 @@ int pmp_entry_count();
  */
 int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len);
 
+
 /*
- * set_mode_and_jump
+ * Privileged modes
+ */
+
+/*
+ * mode_set_and_jump
  *
  * Set mstatus.mpp, sets mepc to passed function pointer and then issues mret
  * Note: the hart will continue running on the same stack
  */
-static inline void set_mode_and_jump(unsigned mode, void (*fn)(void))
+static inline void mode_set_and_jump(unsigned mode, void (*fn)(void))
 {
     assert(mode <= PRV_U);
     write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));
@@ -118,12 +160,12 @@ static inline void set_mode_and_jump(unsigned mode, void (*fn)(void))
 }
 
 /*
- * set_mode_and_continue
+ * mode_set_and_continue
  *
  * Set mstatus.mpp, sets mepc to instruction after mret and then issues mret
  * Note: the hart will continue running on the same stack
  */
-static inline void set_mode_and_continue(unsigned mode)
+static inline void mode_set_and_continue(unsigned mode)
 {
     assert(mode <= PRV_U);
     write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));

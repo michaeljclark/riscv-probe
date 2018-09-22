@@ -6,47 +6,114 @@
 #include "arch/riscv/encoding.h"
 #include "arch/riscv/machine.h"
 
-static int pmp_count = -1;
+static pmp_info_t pmp_info = {
+    .width = -1,
+    .count = -1,
+    .granularity = -1
+};
 
 static void trap_save_cause(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc)
 {
     write_csr(mepc, mepc + 4);
 }
 
-int pmp_entry_count()
+pmp_info_t pmp_probe()
 {
     trap_fn save;
 
-    /* return cached value */
-    if (pmp_count >= 0) {
-        return pmp_count;
+    if (pmp_info.count >= 0) {
+        return pmp_info;
     }
 
-    /* loop through PMPs checking we can set bit 1 */
+    /* loop through PMPs checking we can set any bits */
     save = get_trap_fn();
     set_trap_fn(trap_save_cause);
-    pmp_count = 0;
-    for (size_t i = 0; i < PMP_COUNT; i++) {
-        int present;
-        uintptr_t addrsave = read_csr_enum(csr_pmpaddr0 + i);
-        write_csr_enum(csr_pmpaddr0 + i, 0b10);
-        present = read_csr_enum(csr_pmpaddr0 + i) == 0b10;
+    pmp_info.count = 0;
+    for (size_t i = 0; i < PMPADDR_COUNT; i++) {
+        uintptr_t addr, addrsave = read_csr_enum(csr_pmpaddr0 + i);
+        write_csr_enum(csr_pmpaddr0 + i, -1UL);
+        addr = read_csr_enum(csr_pmpaddr0 + i);
         write_csr_enum(csr_pmpaddr0 + i, addrsave);
-        if (present) {
-            pmp_count++;
+        if (addr) {
+            pmp_info.count++;
+            if (i == 0) {
+                pmp_info.width = (sizeof(addr) << 3) - clz(addr) + 2;
+                pmp_info.granularity = ctz(addr) + 2;
+            }
         } else {
+            if (i == 0) {
+                pmp_info.width = 0;
+                pmp_info.granularity = 0;
+            }
             break;
         }
     }
     set_trap_fn(save);
 
-    return pmp_count;
+    return pmp_info;
+}
+
+int pmp_entry_width()
+{
+    if (pmp_info.width < 0) {
+        pmp_probe();
+    }
+    return pmp_info.width;
+}
+
+int pmp_entry_granularity()
+{
+    if (pmp_info.granularity < 0) {
+        pmp_probe();
+    }
+    return pmp_info.granularity;
+}
+
+int pmp_entry_count()
+{
+    if (pmp_info.count < 0) {
+        pmp_probe();
+    }
+    return pmp_info.count;
+}
+
+void pmp_clear_all()
+{
+    trap_fn save = get_trap_fn();
+    set_trap_fn(trap_save_cause);
+    for (size_t i = 0; i < PMPCFG_COUNT; i++) {
+        write_csr_enum(csr_pmpcfg0 + i, 0);
+    }
+    for (size_t i = 0; i < PMPADDR_COUNT; i++) {
+        write_csr_enum(csr_pmpaddr0 + i, 0);
+    }
+    set_trap_fn(save);
+}
+
+void pmp_allow_all()
+{
+    const uintptr_t pmpc = PMP_NAPOT | PMP_R | PMP_W | PMP_X;
+
+    if (pmp_entry_count() == 0) {
+        return;
+    }
+
+    pmp_clear_all();
+
+    /* borrowed from bbl  */
+    asm volatile ("la t0, 1f\n\t"
+                  "csrrw t0, mtvec, t0\n\t"
+                  "csrw pmpaddr0, %1\n\t"
+                  "csrw pmpcfg0, %0\n\t"
+                  ".align 2\n\t"
+                  "1: csrw mtvec, t0"
+                  : : "r" (pmpc), "r" (-1UL) : "t0");
 }
 
 int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
 {
     /* check parameters */
-    if (n >= PMP_COUNT || len < 4 || !ispow2(len)) {
+    if (n >= PMPADDR_COUNT || len < 4 || !ispow2(len)) {
         return -1;
     }
 

@@ -41,6 +41,7 @@ int main()
 		if (uart = getauxval(*uart_k)) {
 			break;
 		}
+		uart_k++;
 	}
 
 	/* locate ROM/Flash (text+rodata) and RAM (data+bss) */
@@ -57,10 +58,15 @@ int main()
 	}
 
 #ifdef __riscv
-    if (pmp_entry_count() == 0) {
-        puts("pmp-not-supported");
-        return 0;
-    }
+	pmp_info_t info = pmp_probe();
+	if (info.count == 0) {
+		puts("pmp-not-supported");
+		return 0;
+	} else {
+		printf("pmp.count: %d\n", info.count);
+		printf("pmp.width: %d\n", info.width);
+		printf("pmp.granularity: %d\n", info.granularity);
+	}
 	/* set up physical memory protection */
 	pmp_entry_set(0, PMP_R | PMP_X, rx_s, rx_l);
 	pmp_entry_set(1, PMP_R | PMP_W, rw_s, rw_l);
@@ -69,7 +75,7 @@ int main()
 	}
 
 	/* switch to user mode enclave */
-	set_mode_and_continue(PRV_U);
+	mode_set_and_continue(PRV_U);
 	puts("riscv-enclave");
 #else
 	puts("architecture-not-supported");
