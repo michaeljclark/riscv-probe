@@ -30,10 +30,12 @@ SECTIONS
   } >ram AT>ram :text
 
   .htif   : {
-    . = ALIGN(4096); *(.htif)
+    . = ALIGN(4096);
+    *(.htif)
   } >ram AT>ram :text
 
   .data : {
+    . = ALIGN(4096);
     PROVIDE(_data_start = .);
     *(.sdata .sdata.*) *(.data .data.*)
     PROVIDE(_data_end = .);

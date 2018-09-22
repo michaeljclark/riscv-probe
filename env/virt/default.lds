@@ -29,6 +29,7 @@ SECTIONS
   } >ram AT>ram :text
 
   .data : {
+    . = ALIGN(4096);
     PROVIDE(_data_start = .);
     *(.sdata .sdata.*) *(.data .data.*)
     PROVIDE(_data_end = .);
