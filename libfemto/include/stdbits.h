@@ -54,8 +54,25 @@ int ctz16(int16_t val);
 int ctz32(int32_t val);
 int ctz64(int64_t val);
 
-#define ispow2(val) ((val) && !((val) & ((val)-1)))
-#define roundpow2(val) (1<<((sizeof(val)>>3)-clz(val-1)))
+static inline int ispow2(uintptr_t val)
+{
+    return val && !(val & (val-1));
+}
+
+static inline uintptr_t roundpow2(uintptr_t val)
+{
+    val--;
+    val |= val >> 1;
+    val |= val >> 2;
+    val |= val >> 4;
+    val |= val >> 8;
+    val |= val >> 16;
+#if __SIZE_WIDTH__ == 64
+    val |= val >> 32;
+#endif
+    val++;
+    return val;
+}
 
 #ifdef __cplusplus
 }
