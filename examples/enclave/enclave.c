@@ -38,12 +38,7 @@ int main()
 	const uintptr_t uartlen = 32;
 
 	/* locate UART address using known configuration keys */
-	while (*uart_k) {
-		if (uart = getauxval(*uart_k)) {
-			break;
-		}
-		uart_k++;
-	}
+	while (*uart_k && !(uart = getauxval(*uart_k++)));
 
 	/* locate ROM/Flash (text+rodata) and RAM (data+bss) */
 	uintptr_t rx_s = (uintptr_t)&_text_start;
