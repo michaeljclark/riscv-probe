@@ -21,6 +21,7 @@ extern char _bss_end;
 static uintptr_t uart_keys[] = {
 	SIFIVE_UART0_CTRL_ADDR,
 	NS16550A_UART0_CTRL_ADDR,
+	RISCV_HTIF_BASE_ADDR,
 	0
 };
 
