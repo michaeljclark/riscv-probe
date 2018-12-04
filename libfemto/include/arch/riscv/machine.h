@@ -153,7 +153,7 @@ int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len);
  */
 static inline void mode_set_and_jump(unsigned mode, void (*fn)(void))
 {
-    assert(mode <= PRV_U);
+    assert(mode <= PRV_M);
     write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));
     write_csr(mepc, fn);
     mret();
@@ -167,7 +167,7 @@ static inline void mode_set_and_jump(unsigned mode, void (*fn)(void))
  */
 static inline void mode_set_and_continue(unsigned mode)
 {
-    assert(mode <= PRV_U);
+    assert(mode <= PRV_M);
     write_csr(mstatus, set_field(read_csr(mstatus), MSTATUS_MPP, mode));
     asm volatile (
         "lla t0, 1f\n"
