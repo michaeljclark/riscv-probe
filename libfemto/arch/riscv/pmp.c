@@ -110,13 +110,8 @@ void pmp_allow_all()
                   : : "r" (pmpc), "r" (-1UL) : "t0");
 }
 
-int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
+static int pmp_entry_set_pow2(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
 {
-    /* check parameters */
-    if (n >= PMPADDR_COUNT || len < 4 || !ispow2(len)) {
-        return -1;
-    }
-
     /* calculate PMP config register and offset */
     int pmpcfg_csr = (__riscv_xlen == 32) ? csr_pmpcfg0 + (n >> 2) :
                      (__riscv_xlen == 64) ? csr_pmpcfg0 + (n >> 2) & ~1 : -1;
@@ -142,4 +137,55 @@ int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
     write_csr_enum(pmpaddr_csr, pmpaddr);
 
     return 0;
+}
+
+static int pmp_entry_set_range(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
+{
+    /* calculate PMP config register and offset */
+    int pmpcfg_csr0 = (__riscv_xlen == 32) ? csr_pmpcfg0 + (n >> 2) :
+                      (__riscv_xlen == 64) ? csr_pmpcfg0 + (n >> 2) & ~1 : -1;
+    int pmpcfg_csr1 = (__riscv_xlen == 32) ? csr_pmpcfg0 + ((n+1) >> 2) :
+                      (__riscv_xlen == 64) ? csr_pmpcfg0 + ((n+1) >> 2) & ~1 : -1;
+    int pmpcfg_shift0 = (__riscv_xlen == 32) ? (n & 3) << 3 :
+                        (__riscv_xlen == 64) ? (n & 7) << 3 : -1;
+    int pmpcfg_shift1 = (__riscv_xlen == 32) ? ((n+1) & 3) << 3 :
+                        (__riscv_xlen == 64) ? ((n+1) & 7) << 3 : -1;
+    if (pmpcfg_csr0 < 0 || pmpcfg_csr1 < 0 || pmpcfg_shift0 < 0 || pmpcfg_shift1 < 0) {
+        return -1;
+    }
+
+    /* encode config */
+    uintptr_t pmpcfg0 = ((uintptr_t)prot) << pmpcfg_shift0;
+    uintptr_t cfgmask0 = ~(0xff << pmpcfg_shift0);
+    uintptr_t pmpcfg1 = ((uintptr_t)prot | PMP_TOR) << pmpcfg_shift1;
+    uintptr_t cfgmask1 = ~(0xff << pmpcfg_shift1);
+
+    /* encode address */
+    int pmpaddr_csr0 = csr_pmpaddr0 + n;
+    int pmpaddr_csr1 = csr_pmpaddr1 + n;
+    uintptr_t pmpaddr0 = addr >> PMP_SHIFT;
+    uintptr_t pmpaddr1 = (addr + len) >> PMP_SHIFT;
+
+    /* write csrs */
+    pmpcfg0 |= (read_csr_enum(pmpcfg_csr0) & cfgmask0) | pmpcfg0;
+    write_csr_enum(pmpcfg_csr0, pmpcfg0);
+    write_csr_enum(pmpaddr_csr0, pmpaddr0);
+    pmpcfg1 |= (read_csr_enum(pmpcfg_csr1) & cfgmask1) | pmpcfg1;
+    write_csr_enum(pmpcfg_csr1, pmpcfg1);
+    write_csr_enum(pmpaddr_csr1, pmpaddr1);
+
+    return 0;
+}
+
+int pmp_entry_set(unsigned n, uint8_t prot, uint64_t addr, uint64_t len)
+{
+    /* check parameters */
+    if (n >= PMPADDR_COUNT || len < 4) {
+        return -1;
+    }
+    if (ispow2(len)) {
+        return pmp_entry_set_pow2(n, prot, addr, len);
+    } else {
+        return pmp_entry_set_range(n, prot, addr, len);
+    }
 }
