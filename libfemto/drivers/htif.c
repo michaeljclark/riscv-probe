@@ -3,7 +3,7 @@
 #ifdef __riscv
 
 #include "femto.h"
-#include "arch/riscv/atomic.h"
+#include "spinlock.h"
 
 struct { uint32_t arr[2]; } volatile tohost __attribute__((section(".htif")));
 struct { uint32_t arr[2]; } volatile fromhost __attribute__((section(".htif")));
