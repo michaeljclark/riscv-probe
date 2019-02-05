@@ -116,6 +116,7 @@ __extension__ ({                                                    \
         );                                                          \
         break;                                                      \
     case 8:                                                         \
+        if (__riscv_xlen < 64) __builtin_unreachable();             \
         __asm__ volatile (                                          \
               ASM_BARRIER "\n" "ld %0, %1\n" ASM_ACQUIRE            \
             : "=&r"(__result), "+A"(*__obj)                         \
@@ -180,6 +181,7 @@ __extension__ ({                                                    \
         );                                                          \
         break;                                                      \
     case 8:                                                         \
+        if (__riscv_xlen < 64) __builtin_unreachable();             \
         __asm__ volatile (                                          \
             ASM_RELEASE "\n" "sd %1, %0\n"                          \
             : "+A"(*__obj) : "r"(__value) : "memory"                \
@@ -243,6 +245,7 @@ __extension__ ({                                                    \
         );                                                          \
         break;                                                      \
     case 8:                                                         \
+        if (__riscv_xlen < 64) __builtin_unreachable();             \
         __asm__ volatile (                                          \
               "0:  lr.d" ASM_AQ " %0, %2\n"                         \
               "    bne  %0, %z3, 1f\n"                              \
@@ -326,6 +329,7 @@ __extension__ ({                                                    \
         );                                                          \
         break;                                                      \
     case 8:                                                         \
+        if (__riscv_xlen < 64) __builtin_unreachable();             \
         __asm__ volatile (                                          \
               AMO_OP ".d" ASM_AQRL " %0, %2, %1\n"                  \
             : "=&r"(__result), "+A"(*__obj)                         \
