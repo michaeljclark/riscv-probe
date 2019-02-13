@@ -23,7 +23,7 @@ extern "C" {
  * thereby allowing access to the thread holding the next ticket number.
  *
  * Initialializtion - the lock is initialized unlocked, so that the
- * next tail increment returns a ticket that will acquires the lock.
+ * next tail increment returns a ticket that will acquire the lock.
  *
  *   tail   | head
  *   -------|-------
