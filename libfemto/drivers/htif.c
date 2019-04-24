@@ -52,10 +52,14 @@ static void htif_set_tohost(uint8_t dev, uint8_t cmd, int64_t data)
 
 static int htif_getchar()
 {
-    int ch;
     spinlock_lock(&htif_lock);
-    if ((ch = htif_get_fromhost(1, 0) & 0xff)) {
+    int ch = htif_get_fromhost(1, 0);
+    if (ch & 0xff) {
         htif_set_tohost(1, 0, 0);
+    }
+    if (ch != -1) {
+        /* we read 0x1xx where xx is the char */
+        ch &= 0xff;
     }
     spinlock_unlock(&htif_lock);
     return ch;
