@@ -5,6 +5,13 @@
 #include "femto.h"
 #include "spinlock.h"
 
+#define HTIF_DEVICE_SYSTEM      0
+#define HTIF_SYS_CMD_POWER      0
+
+#define HTIF_DEVICE_IO          1
+#define HTIF_IO_CMD_READ        0
+#define HTIF_IO_CMD_WRITE       1
+
 struct { uint32_t arr[2]; } volatile tohost __attribute__((section(".htif")));
 struct { uint32_t arr[2]; } volatile fromhost __attribute__((section(".htif")));
 
@@ -53,9 +60,9 @@ static void htif_set_tohost(uint8_t dev, uint8_t cmd, int64_t data)
 static int htif_getchar()
 {
     spinlock_lock(&htif_lock);
-    int ch = htif_get_fromhost(1, 0);
+    int ch = htif_get_fromhost(HTIF_DEVICE_IO, HTIF_IO_CMD_READ);
     if (ch & 0xff) {
-        htif_set_tohost(1, 0, 0);
+        htif_set_tohost(HTIF_DEVICE_IO, HTIF_IO_CMD_READ, 0);
     }
     if (ch != -1) {
         /* we read 0x1xx where xx is the char */
@@ -68,7 +75,7 @@ static int htif_getchar()
 static int htif_putchar(int ch)
 {
     spinlock_lock(&htif_lock);
-    htif_set_tohost(1, 1, ch & 0xff);
+    htif_set_tohost(HTIF_DEVICE_IO, HTIF_IO_CMD_WRITE, ch & 0xff);
     spinlock_unlock(&htif_lock);
     return ch & 0xff;
 }
@@ -76,7 +83,7 @@ static int htif_putchar(int ch)
 static void htif_poweroff(int status)
 {
     for (;;) {
-        htif_set_tohost(0, 0, 1);
+        htif_set_tohost(HTIF_DEVICE_SYSTEM, HTIF_SYS_CMD_POWER, 1);
     }
 }
 
