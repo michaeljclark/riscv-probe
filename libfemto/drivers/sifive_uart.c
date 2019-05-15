@@ -51,7 +51,7 @@ static int sifive_uart_putchar(int ch)
     return uart[UART_REG_TXFIFO] = ch & 0xff;
 }
 
-console_device_t console_sifive_uart = {
+const console_device_t console_sifive_uart = {
     sifive_uart_init,
     sifive_uart_getchar,
     sifive_uart_putchar

@@ -87,14 +87,14 @@ static void htif_poweroff(int status)
     }
 }
 
-console_device_t console_htif = {
+const console_device_t console_htif = {
     NULL,
     htif_getchar,
     htif_putchar
 };
 
 
-poweroff_device_t poweroff_htif = {
+const poweroff_device_t poweroff_htif = {
     NULL,
     htif_poweroff
 };

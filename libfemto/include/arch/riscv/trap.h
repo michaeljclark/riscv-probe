@@ -10,8 +10,8 @@ typedef void (*trap_fn)(uintptr_t* regs, uintptr_t mcause, uintptr_t mepc);
 trap_fn get_trap_fn();
 void set_trap_fn(trap_fn fn);
 
-const char * riscv_excp_names[16];
-const char * riscv_intr_names[16];
+const char * const riscv_excp_names[16];
+const char * const riscv_intr_names[16];
 
 enum {
   cause_misaligned_fetch     = 0,

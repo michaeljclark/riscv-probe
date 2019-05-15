@@ -6,8 +6,8 @@
 extern "C" {
 #endif
 
-int* csr_enum_array();
-const char** csr_name_array();
+int const * csr_enum_array();
+char const * const * csr_name_array();
 long read_csr_enum(int csrenum);
 void write_csr_enum(int csrenum, long value);
 
