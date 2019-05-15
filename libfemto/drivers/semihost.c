@@ -45,14 +45,14 @@ static void semihost_poweroff(int status)
     __builtin_unreachable();
 }
 
-console_device_t console_semihost = {
+const console_device_t console_semihost = {
     NULL,
     semihost_getchar,
     semihost_putchar
 };
 
 
-poweroff_device_t poweroff_semihost = {
+const poweroff_device_t poweroff_semihost = {
 	NULL,
 	semihost_poweroff
 };

@@ -17,22 +17,23 @@ typedef struct poweroff_device {
     void (*poweroff)(int);
 } poweroff_device_t;
 
-void register_console(console_device_t *dev);
-void register_poweroff(poweroff_device_t *dev);
+void reset_device_handlers(void);
+void register_console(console_device_t const *  dev);
+void register_poweroff(poweroff_device_t const * dev);
 
-extern console_device_t *console_dev;
-extern poweroff_device_t *poweroff_dev;
+extern console_device_t const *console_dev;
+extern poweroff_device_t const *poweroff_dev;
 
-extern console_device_t console_none;
-extern console_device_t console_htif;
-extern console_device_t console_ns16550a;
-extern console_device_t console_sifive_uart;
-extern console_device_t console_semihost;
+extern const console_device_t console_none;
+extern const console_device_t console_htif;
+extern const console_device_t console_ns16550a;
+extern const console_device_t console_sifive_uart;
+extern const console_device_t console_semihost;
 
-extern poweroff_device_t poweroff_none;
-extern poweroff_device_t poweroff_htif;
-extern poweroff_device_t poweroff_sifive_test;
-extern poweroff_device_t poweroff_semihost;
+extern const poweroff_device_t poweroff_none;
+extern const poweroff_device_t poweroff_htif;
+extern const poweroff_device_t poweroff_sifive_test;
+extern const poweroff_device_t poweroff_semihost;
 
 #ifdef __cplusplus
 }

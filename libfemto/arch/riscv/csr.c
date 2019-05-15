@@ -5,7 +5,7 @@
 #include "arch/riscv/encoding.h"
 #include "arch/riscv/machine.h"
 
-static int all_csr_enums[] = {
+static const int all_csr_enums[] = {
     csr_fflags,
     csr_frm,
     csr_fcsr,
@@ -70,7 +70,7 @@ static int all_csr_enums[] = {
     csr_none,
 };
 
-static const char* all_csr_names[] = {
+static char const * const  all_csr_names[] = {
     "none",
     "fflags",
     "frm",
@@ -135,12 +135,12 @@ static const char* all_csr_names[] = {
     "pmpaddr15"
 };
 
-int* csr_enum_array()
+int const * csr_enum_array()
 {
     return all_csr_enums;
 }
 
-const char** csr_name_array()
+char const * const * csr_name_array()
 {
     return all_csr_names;
 }

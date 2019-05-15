@@ -2,7 +2,7 @@
 
 #include "femto.h"
 
-void register_console(console_device_t *dev)
+void register_console(console_device_t const *dev)
 {
     console_dev = dev;
     if (dev->init) {
@@ -10,7 +10,7 @@ void register_console(console_device_t *dev)
     }
 }
 
-void register_poweroff(poweroff_device_t *dev)
+void register_poweroff(poweroff_device_t const *dev)
 {
     poweroff_dev = dev;
     if (dev->init) {
@@ -38,16 +38,22 @@ static void default_poweroff(int status)
     }
 }
 
-console_device_t console_none = {
+const console_device_t console_none = {
     NULL,
     default_getchar,
     default_putchar
 };
 
-poweroff_device_t poweroff_none = {
+const poweroff_device_t poweroff_none = {
     NULL,
     default_poweroff,
 };
 
-console_device_t *console_dev = &console_none;
-poweroff_device_t *poweroff_dev = &poweroff_none;
+console_device_t const *console_dev;
+poweroff_device_t const *poweroff_dev;
+
+void reset_device_handlers(void)
+{
+    console_dev = &console_none;
+    poweroff_dev = &poweroff_none;
+}

@@ -58,7 +58,7 @@ static int ns16550a_putchar(int ch)
     return uart[UART_THR] = ch & 0xff;
 }
 
-console_device_t console_ns16550a = {
+const console_device_t console_ns16550a = {
     ns16550a_init,
     ns16550a_getchar,
     ns16550a_putchar
