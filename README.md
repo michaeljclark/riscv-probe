@@ -49,14 +49,14 @@ To invoke the probe example in spike and RISC-V QEMU:
 
 - `$ spike --isa=RV32IMAFDC build/bin/rv32imac/spike/probe`
 - `$ spike --isa=RV64IMAFDC build/bin/rv64imac/spike/probe`
-- `$ qemu-system-riscv32 -nographic -machine spike_v1.10 -kernel build/bin/rv32imac/spike/probe`
-- `$ qemu-system-riscv64 -nographic -machine spike_v1.10 -kernel build/bin/rv64imac/spike/probe`
-- `$ qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32imac/virt/probe`
-- `$ qemu-system-riscv64 -nographic -machine virt -kernel build/bin/rv64imac/virt/probe`
-- `$ qemu-system-riscv32 -nographic -machine sifive_e -kernel build/bin/rv32imac/qemu-sifive_e/probe`
-- `$ qemu-system-riscv64 -nographic -machine sifive_e -kernel build/bin/rv64imac/qemu-sifive_e/probe`
-- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32imac/qemu-sifive_u/probe`
-- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64imac/qemu-sifive_u/probe`
+- `$ qemu-system-riscv32 -nographic -machine spike -kernel build/bin/rv32imac/spike/probe` -bios none
+- `$ qemu-system-riscv64 -nographic -machine spike -kernel build/bin/rv64imac/spike/probe` -bios none
+- `$ qemu-system-riscv32 -nographic -machine virt -kernel build/bin/rv32imac/virt/probe` -bios none
+- `$ qemu-system-riscv64 -nographic -machine virt -kernel build/bin/rv64imac/virt/probe` -bios none
+- `$ qemu-system-riscv32 -nographic -machine sifive_e -kernel build/bin/rv32imac/qemu-sifive_e/probe` -bios none
+- `$ qemu-system-riscv64 -nographic -machine sifive_e -kernel build/bin/rv64imac/qemu-sifive_e/probe` -bios none
+- `$ qemu-system-riscv32 -nographic -machine sifive_u -kernel build/bin/rv32imac/qemu-sifive_u/probe` -bios none
+- `$ qemu-system-riscv64 -nographic -machine sifive_u -kernel build/bin/rv64imac/qemu-sifive_u/probe` -bios none
 
 ## libfemto
 
