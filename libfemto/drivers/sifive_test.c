@@ -22,7 +22,7 @@ static void sifive_test_poweroff(int status)
     }
 }
 
-poweroff_device_t poweroff_sifive_test = {
+const poweroff_device_t poweroff_sifive_test = {
 	sifive_test_init,
 	sifive_test_poweroff
 };

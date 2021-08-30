@@ -7,7 +7,7 @@
 
 static trap_fn tfn = 0;
 
-const char * riscv_excp_names[16] = {
+const char * const riscv_excp_names[16] = {
     "misaligned_fetch",
     "fault_fetch",
     "illegal_instruction",
@@ -26,7 +26,7 @@ const char * riscv_excp_names[16] = {
     "store_page_fault"
 };
 
-const char * riscv_intr_names[16] = {
+const char * const riscv_intr_names[16] = {
     "u_software",
     "s_software",
     "h_software",
